@@ -61,6 +61,23 @@ let clientBundle$ = (() => {
 
 let server = express();
 
+server.get('/template', function(req, res) {
+    var options = {
+        root: __dirname
+    }
+
+    res.sendFile('template.html', options, function (err) {
+        if (err) {
+            console.log(err)
+            res.status(err.status).end()
+        }
+    })
+})
+
+server.use(express.static('public'))
+server.use(express.static('build/css'))
+
+
 server.get('/', function (req, res) {
     // Ignore favicon requests
     if (req.url === '/favicon.ico') {

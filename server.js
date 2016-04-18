@@ -29,7 +29,8 @@ function prependHTML5Doctype(html) {
 
 function wrapAppResultWithBoilerplate(appFn, context$, bundle$) {
     return function wrappedAppFn(sources) {
-        let vtree$ = appFn(sources).DOM;
+        let app = appFn(sources)
+        let vtree$ = app.DOM
         let wrappedVTree$ = Observable.combineLatest(vtree$, context$, bundle$,
             wrapVTreeWithHTMLBoilerplate
         );
@@ -60,7 +61,7 @@ let clientBundle$ = (() => {
 
 let server = express();
 
-server.use(function (req, res) {
+server.get('/', function (req, res) {
     // Ignore favicon requests
     if (req.url === '/favicon.ico') {
         res.writeHead(200, {'Content-Type': 'image/x-icon'});
@@ -74,7 +75,7 @@ server.use(function (req, res) {
     });
 
     let wrappedAppFn = wrapAppResultWithBoilerplate(app, context$, clientBundle$);
-    let {sources} = Cycle.run(wrappedAppFn, {
+    let { sources } = Cycle.run(wrappedAppFn, {
         DOM: makeHTMLDriver(),
         context: () => context$
     });

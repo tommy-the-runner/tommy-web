@@ -71,7 +71,8 @@ server.get('/', function (req, res) {
     console.log(`req: ${req.method} ${req.url}`);
 
     let context$ = Observable.just({
-        route: req.url
+        route: req.url,
+        timestamp: new Date().getTime()
     });
 
     let wrappedAppFn = wrapAppResultWithBoilerplate(app, context$, clientBundle$);

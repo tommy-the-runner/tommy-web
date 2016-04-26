@@ -6,9 +6,6 @@ let app = require('./app');
 function clientSideApp(responses) {
     let requests = app(responses);
 
-    //TODO: fix double render and keep event handling
-    //requests.DOM = requests.DOM.skip(1);
-
     return requests;
 }
 

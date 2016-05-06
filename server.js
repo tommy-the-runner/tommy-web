@@ -7,17 +7,38 @@ let {html, head, title, body, div, script, makeHTMLDriver, hJSX} = require('@cyc
 let app = require('./app');
 
 function wrapVTreeWithHTMLBoilerplate(vtree, context, clientBundle) {
+
     return (
-        <html>
+        <html lang="en">
             <head>
-                <title>Cycle Isomorphism Example</title>
+                <link href="reset.css" rel="stylesheet" type="text/css" />
+                <link href="styles.css" rel="stylesheet" type="text/css" />
+                <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
+                <meta charset="UTF-8" />
+                <title>Tommy the Runner</title>
             </head>
             <body>
+
+                <header className="top clearfix">
+                    <img className="logo" src="music_note.png" alt="Tommy the Runner"/>
+                    <h2 className="title">Sum two digits</h2>
+                </header>
+
                 <div className="app-container">
                     {vtree}
                 </div>
                 <script>window.appContext = {serialize(context)}</script>
                 <script>{clientBundle}</script>
+
+                <div className="footer clearfix">
+                    <div id="terminal">
+                        <span>{ '>_ I\'m the terminal' }</span>
+                    </div>
+                    <div className="copyright">
+                        <span>Copyright @ 2016</span>
+                    </div>
+                </div>
+
             </body>
         </html>
     )
@@ -61,22 +82,8 @@ let clientBundle$ = (() => {
 
 let server = express();
 
-server.get('/template', function(req, res) {
-    var options = {
-        root: __dirname
-    }
-
-    res.sendFile('template.html', options, function (err) {
-        if (err) {
-            console.log(err)
-            res.status(err.status).end()
-        }
-    })
-})
-
 server.use(express.static('public'))
 server.use(express.static('build/css'))
-
 
 server.get('/', function (req, res) {
     // Ignore favicon requests

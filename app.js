@@ -11,25 +11,25 @@ let {
     hJSX
 } = require('@cycle/dom');
 
-import TimestampButton from './timestamp_button.js'
+import TimestampButton from './components/timestamp_button.js'
+import CodePanel from './components/code_panel.js'
+import SpecsPanel from './components/specs_panel.js'
 
-function renderHomePage(child$, child2$) {
+function renderPageContent(codePanel$, specsPanel$) {
 
-    return Rx.Observable.combineLatest(child$, child2$, (button, button2) => (
-        <section className="home">
-            <h1>The homepage</h1>
-            <p>Welcome to our spectacular web page with nothing special here.</p>
-            { button }
-            { button2 }
-        </section>
+    return Rx.Observable.combineLatest(codePanel$, specsPanel$, (codePanel, specsPanel) => (
+        <div id="container" className="clearfix">
+            { codePanel }
+            { specsPanel }
+        </div>
     ))
 }
 
 function app(sources) {
-    let button$ = TimestampButton(sources)
-    let button2$ = TimestampButton(sources)
+    let codePanel$ = CodePanel(sources)
+    let specsPanel$ = SpecsPanel(sources)
 
-    let vtree$ = renderHomePage(button$.DOM, button2$.DOM)
+    let vtree$ = renderPageContent(codePanel$.DOM, specsPanel$.DOM)
 
     return {
         DOM: vtree$

@@ -66,7 +66,12 @@ let clientBundle$ = (() => {
     let bundleString = '';
     let bundleStream = browserify()
         .transform('babelify')
-        .transform({ global: true }, 'uglifyify')
+        .transform({
+            global: true,
+            mangle: {
+                except: ['require']
+            }
+        }, 'uglifyify')
         .add('./client.js')
         .bundle();
     bundleStream.on('data', function (data) {

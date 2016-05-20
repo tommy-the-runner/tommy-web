@@ -195,6 +195,22 @@ body {
   box-sizing: border-box;
 }
 
+.passed {
+  color: #7CFC00;
+}
+
+.failed {
+  color: #FF0000;
+}
+
+.pending {
+  color: #00FFFF;
+}
+
+.error {
+  color: #FF4500;
+}
+
 .clearfix:after {
   visibility: hidden;
   display: block;

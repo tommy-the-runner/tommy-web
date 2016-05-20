@@ -22,11 +22,13 @@
     "@cycle/isolate": "^1.2.0",
     "babel-plugin-transform-react-jsx": "^6.7.4",
     "babelify": "^7.2.0",
+    "brfs": "^1.4.3",
     "browserify": "^13.0.0",
     "express": "^4.12.3",
     "react-proxy": "^1.1.8",
     "rx": "4.0.6",
     "serialize-javascript": "^1.0.0",
+    "tommy-the-runner": "0.0.2",
     "uglifyify": "^3.0.1"
   },
   "bugs": {

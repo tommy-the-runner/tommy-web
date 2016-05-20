@@ -11,7 +11,6 @@ let {
     hJSX
 } = require('@cycle/dom');
 
-import TimestampButton from './components/timestamp_button.js'
 import CodePanel from './components/code_panel.js'
 import SpecsPanel from './components/specs_panel.js'
 

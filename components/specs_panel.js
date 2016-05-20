@@ -10,6 +10,19 @@ function intent({ DOM, context }) {
 
 function view(empty$) {
     return empty$.map(e => {
+        var specCodeRaw = `const expect = require('chai').expect
+const sum = require('subject')
+
+describe('sum', function () {
+
+    it('should sum two numbers', function () {
+        expect(sum(1, 1)).to.equal(2)
+    })
+
+})`
+
+        var specCode = specCodeRaw.replace('require(\'subject\')', '/* your code here */')
+
         return (
             <div id="spec">
                 <header>
@@ -19,17 +32,7 @@ function view(empty$) {
                     <div className="header-triangle"></div>
                 </header>
                 <div className="spec-body">
-                    <span>{ 'describe("Sum", () => { it("can sum two digits", () => { }) })'}</span>
-                    <span>{ 'describe("Sum", () => { it("can sum two digits", () => { }) })'}</span>
-                    <span>{ 'describe("Sum", () => { it("can sum two digits", () => { }) })'}</span>
-                    <span>{ 'describe("Sum", () => { it("can sum two digits", () => { }) })'}</span>
-                    <span>{ 'describe("Sum", () => { it("can sum two digits", () => { }) })'}</span>
-                    <span>{ 'describe("Sum", () => { it("can sum two digits", () => { }) })'}</span>
-                    <span>{ 'describe("Sum", () => { it("can sum two digits", () => { }) })'}</span>
-                    <span>{ 'describe("Sum", () => { it("can sum two digits", () => { }) })'}</span>
-                    <span>{ 'describe("Sum", () => { it("can sum two digits", () => { }) })'}</span>
-                    <span>{ 'describe("Sum", () => { it("can sum two digits", () => { }) })'}</span>
-
+                    <pre>{ specCode }</pre>
                 </div>
             </div>
         )

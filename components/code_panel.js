@@ -4,23 +4,15 @@ import isolate from '@cycle/isolate';
 let tommy = require('tommy-the-runner')
 let Rx = require('rx')
 
-function intent({ DOM, context }) {
+function intent({ DOM, exercise, context }) {
+
     let buttonClicks$ = DOM.select('.submit-button').events('click')
-        .flatMap(ev => {
-           var userCode = document.getElementById('user-code').value
-
-            // TODO: retrieve specs from the original JSON (store in context?)
-            var specs = `
-                            const expect = require('chai').expect
-                            const sum = require('subject')
-                            describe('sum', function () {
-                                it('should sum two numbers', function () {
-                                    expect(sum(1, 1)).to.equal(2)
-                                })
-                            })
-                        `
-
-            return Rx.Observable.fromPromise(tommy.run(userCode, specs))
+    let combined$ = Rx.Observable.combineLatest(buttonClicks$, exercise, (c, ex) => {
+            return ex
+        })
+        .flatMap(ex => {
+            var userCode = document.getElementById('user-code').value
+            return Rx.Observable.fromPromise(tommy.run(userCode, ex.specsCode))
         })
         .map(reporter => {
             var stats = reporter.stats
@@ -49,7 +41,7 @@ function intent({ DOM, context }) {
 
     return context
         .map(ctx => ctx.timestamp)
-        .concat(buttonClicks$)
+        .concat(combined$)
 }
 
 function view(testResults$) {

@@ -19,6 +19,7 @@
   "dependencies": {
     "@cycle/core": "^6.0.3",
     "@cycle/dom": "^9.4.0",
+    "@cycle/http": "^8.2.2",
     "@cycle/isolate": "^1.2.0",
     "babel-plugin-transform-react-jsx": "^6.7.4",
     "babelify": "^7.2.0",

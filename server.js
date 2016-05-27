@@ -2,8 +2,9 @@ let Cycle = require('@cycle/core');
 let express = require('express');
 let browserify = require('browserify');
 let serialize = require('serialize-javascript');
-let {Observable, ReplaySubject} = require('rx');
-let {html, head, title, body, div, script, makeHTMLDriver, hJSX} = require('@cycle/dom');
+let { Observable, ReplaySubject } = require('rx');
+let { html, head, title, body, div, script, makeHTMLDriver, hJSX } = require('@cycle/dom');
+let { makeHTTPDriver } = require('@cycle/http');
 let app = require('./app');
 
 function wrapVTreeWithHTMLBoilerplate(vtree, context, clientBundle) {
@@ -54,9 +55,11 @@ function wrapAppResultWithBoilerplate(appFn, context$, bundle$) {
         let vtree$ = app.DOM
         let wrappedVTree$ = Observable.combineLatest(vtree$, context$, bundle$,
             wrapVTreeWithHTMLBoilerplate
-        );
+        )
+
         return {
-            DOM: wrappedVTree$
+            DOM: wrappedVTree$,
+            HTTP: app.HTTP
         };
     };
 }
@@ -92,28 +95,33 @@ let server = express();
 server.use(express.static('public'))
 server.use(express.static('build/css'))
 
-server.get('/', function (req, res) {
+server.get('/:exerciseSlug', function (req, res) {
+
     // Ignore favicon requests
     if (req.url === '/favicon.ico') {
         res.writeHead(200, {'Content-Type': 'image/x-icon'});
         res.end();
         return;
     }
-    console.log(`req: ${req.method} ${req.url}`);
+
+    console.log(`req: ${req.method} ${req.url} ${req.params.exerciseSlug}`);
 
     let context$ = Observable.just({
         route: req.url,
+        exerciseSlug: req.params.exerciseSlug,
         timestamp: new Date().getTime()
     });
 
     let wrappedAppFn = wrapAppResultWithBoilerplate(app, context$, clientBundle$);
     let { sources } = Cycle.run(wrappedAppFn, {
         DOM: makeHTMLDriver(),
+        HTTP: makeHTTPDriver(),
         context: () => context$
     });
+
     let html$ = sources.DOM.map(prependHTML5Doctype);
     html$.subscribe(html => res.send(html));
-});
+})
 
 let port = process.env.PORT || 3000;
 server.listen(port);

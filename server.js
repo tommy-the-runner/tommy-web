@@ -2,12 +2,14 @@ let Cycle = require('@cycle/core');
 let express = require('express');
 let browserify = require('browserify');
 let serialize = require('serialize-javascript');
+let config = require('config')
+let apiUrl = config.get('api_url')
 let { Observable, ReplaySubject } = require('rx');
 let { html, head, title, body, div, script, makeHTMLDriver, hJSX } = require('@cycle/dom');
 let { makeHTTPDriver } = require('@cycle/http');
 let app = require('./app');
 
-function wrapVTreeWithHTMLBoilerplate(vtree, context, clientBundle) {
+function wrapVTreeWithHTMLBoilerplate(vtree, context, config, clientBundle) {
 
     return (
         <html lang="en">
@@ -29,6 +31,7 @@ function wrapVTreeWithHTMLBoilerplate(vtree, context, clientBundle) {
                     {vtree}
                 </div>
                 <script>window.appContext = {serialize(context)}</script>
+                <script>window.appConfig = {serialize(config)}</script>
                 <script>{clientBundle}</script>
 
                 <div className="footer clearfix">
@@ -49,11 +52,11 @@ function prependHTML5Doctype(html) {
     return `<!doctype html>${html}`;
 }
 
-function wrapAppResultWithBoilerplate(appFn, context$, bundle$) {
+function wrapAppResultWithBoilerplate(appFn, context$, config$, bundle$) {
     return function wrappedAppFn(sources) {
         let app = appFn(sources)
         let vtree$ = app.DOM
-        let wrappedVTree$ = Observable.combineLatest(vtree$, context$, bundle$,
+        let wrappedVTree$ = Observable.combineLatest(vtree$, context$, config$, bundle$,
             wrapVTreeWithHTMLBoilerplate
         )
 
@@ -106,17 +109,21 @@ server.get('/:exerciseSlug', function (req, res) {
 
     console.log(`req: ${req.method} ${req.url} ${req.params.exerciseSlug}`);
 
+    let config$ = Observable.just({
+        apiUrl
+    })
+
     let context$ = Observable.just({
         route: req.url,
-        exerciseSlug: req.params.exerciseSlug,
-        timestamp: new Date().getTime()
+        exerciseSlug: req.params.exerciseSlug
     });
 
-    let wrappedAppFn = wrapAppResultWithBoilerplate(app, context$, clientBundle$);
+    let wrappedAppFn = wrapAppResultWithBoilerplate(app, context$, config$, clientBundle$);
     let { sources } = Cycle.run(wrappedAppFn, {
         DOM: makeHTMLDriver(),
         HTTP: makeHTTPDriver(),
-        context: () => context$
+        context: () => context$,
+        config: () => config$
     });
 
     let html$ = sources.DOM.map(prependHTML5Doctype);

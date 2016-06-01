@@ -5,9 +5,8 @@ let tommy = require('tommy-the-runner')
 let Rx = require('rx')
 
 function intent({ DOM, exercise, context }) {
-
     let buttonClicks$ = DOM.select('.submit-button').events('click')
-    let combined$ = Rx.Observable.combineLatest(buttonClicks$, exercise, (c, ex) => {
+    let testResult$ = Rx.Observable.combineLatest(buttonClicks$, exercise, (c, ex) => {
             return ex
         })
         .flatMap(ex => {
@@ -40,8 +39,7 @@ function intent({ DOM, exercise, context }) {
         })
 
     return context
-        .map(ctx => ctx.timestamp)
-        .concat(combined$)
+        .concat(testResult$)
 }
 
 function view(testResults$) {
@@ -84,8 +82,8 @@ function view(testResults$) {
 }
 
 function CodePanel(sources) {
-    const timestamp$ = intent(sources)
-    const vtree$ = view(timestamp$)
+    const testResult$ = intent(sources)
+    const vtree$ = view(testResult$)
 
     return {
         DOM: vtree$

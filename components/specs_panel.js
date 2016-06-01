@@ -1,7 +1,7 @@
 let Rx = require('rx')
 
 let {div, header, footer, button, p, hJSX} = require('@cycle/dom')
-let isolate = require( '@cycle/isolate')
+import isolate from '@cycle/isolate';
 
 function intent({ exercise }) {
     return exercise

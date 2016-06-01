@@ -20,7 +20,7 @@
     "@cycle/core": "^6.0.3",
     "@cycle/dom": "^9.4.0",
     "@cycle/http": "^8.2.2",
-    "@cycle/isolate": "^1.2.0",
+    "@cycle/isolate": "^1.3.2",
     "babel-cli": "^6.9.0",
     "babel-plugin-transform-react-jsx": "^6.7.4",
     "babel-preset-es2015": "^6.9.0",
@@ -37,7 +37,7 @@
     "react-proxy": "^1.1.8",
     "rx": "4.0.6",
     "serialize-javascript": "^1.0.0",
-    "tommy-the-runner": "0.0.2",
+    "tommy-the-runner": "0.0.3",
     "uglifyify": "^3.0.1"
   },
   "bugs": {

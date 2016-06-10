@@ -22,6 +22,9 @@ body {
 
 .logo {
   float: left;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
 }
 
 .title {
@@ -50,13 +53,12 @@ body {
   bottom: 0;
   left: 0;
   width: 50%;
-  background-color: $backgroundBeige;
   min-height: 20em;
   padding: 0 10px;
 }
 
 #code textarea {
-  background-color: $backgroundBeige;
+  background-color: transparent;
   font-family: Consolas, monaco, monospace;
   position: absolute;
   top: 3em;
@@ -92,7 +94,6 @@ body {
 }
 
 #spec {
-  background-color: $backgroundBeige;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -105,7 +106,6 @@ body {
 .spec-body {
   font-family: Consolas, monaco, monospace;
   border-left: 5px dashed #e68a00;
-  background-color: $backgroundBeige;
   overflow-y: auto;
   width: 100%;
   position: absolute;

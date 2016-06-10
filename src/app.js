@@ -39,7 +39,7 @@ function app(sources) {
 
     const request$ = Rx.Observable.combineLatest(sources.context, sources.config, (ctx, cfg) => {
         const exerciseSlug = ctx.exerciseSlug
-        const apiUrl = cfg.apiUrl
+        const apiUrl = cfg.api_url
 
         return { url: `${apiUrl}?slug=${exerciseSlug}`}
     })

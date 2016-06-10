@@ -1,9 +1,9 @@
+let path = require('path');
 let Cycle = require('@cycle/core');
 let express = require('express');
 let browserify = require('browserify');
 let serialize = require('serialize-javascript');
 let config = require('config')
-let apiUrl = config.get('api_url')
 let { Observable, ReplaySubject } = require('rx');
 let { html, head, title, body, div, script, makeHTMLDriver, hJSX } = require('@cycle/dom');
 let { makeHTTPDriver } = require('@cycle/http');
@@ -14,16 +14,29 @@ function wrapVTreeWithHTMLBoilerplate(vtree, context, config, clientBundle) {
     return (
         <html lang="en">
             <head>
-                <link href="reset.css" rel="stylesheet" type="text/css" />
-                <link href="styles.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/reset.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/styles.css" rel="stylesheet" type="text/css" />
                 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
                 <meta charset="UTF-8" />
                 <title>Tommy the Runner</title>
+                <meta name="description" content="Exercise your testing skills with a coding challenge." />
+
+                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:title" content="Tommy the runner" />
+                <meta name="twitter:description" content="Exercise your testing skills with a coding challenge." />
+                <meta name="twitter:creator" content="@ertrzyiks" />
+                <meta name="twitter:image" content={ config.base_url + "/assets/images/tommy-logo-big.png" } />
+
+                <meta property="og:title" content="Tommy the Runner" />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={ config.base_url + "/" } />
+                <meta property="og:image" content={ config.base_url + "/assets/images/tommy-logo-big.png" } />
+                <meta property="og:description" content="Exercise your testing skills with a coding challenge." />
             </head>
             <body>
 
                 <header className="top clearfix">
-                    <img className="logo" src="music_note.png" alt="Tommy the Runner"/>
+                    <img className="logo" src="/assets/images/tommy-logo.png" alt="Tommy the Runner"/>
                     <h2 className="title">Sum two digits</h2>
                 </header>
 
@@ -80,7 +93,7 @@ let clientBundle$ = (() => {
             }
         },
         'uglifyify')
-        .add('./client.js')
+        .add('./src/client.js')
         .bundle();
     bundleStream.on('data', function (data) {
         bundleString += data;
@@ -95,8 +108,8 @@ let clientBundle$ = (() => {
 
 let server = express();
 
-server.use(express.static('public'))
-server.use(express.static('build/css'))
+server.use('/assets', express.static(__dirname + '/../public'))
+server.use('/assets', express.static(__dirname + '/../build/css'))
 
 server.get('/:exerciseSlug', function (req, res) {
 
@@ -109,9 +122,7 @@ server.get('/:exerciseSlug', function (req, res) {
 
     console.log(`req: ${req.method} ${req.url} ${req.params.exerciseSlug}`);
 
-    let config$ = Observable.just({
-        apiUrl
-    })
+    let config$ = Observable.just(Object.assign({}, config))
 
     let context$ = Observable.just({
         route: req.url,

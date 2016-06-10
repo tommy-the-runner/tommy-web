@@ -8,7 +8,8 @@
     "prestart": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "gulp watch",
-    "start": "babel-node ./server.js"
+    "start": "babel-node ./src/server.js",
+    "start:dev": "nodemon ./src/server.js --exec babel-node"
   },
   "repository": {
     "type": "git",
@@ -44,5 +45,7 @@
     "url": "https://github.com/tommy-the-runner/tommy-web/issues"
   },
   "homepage": "https://github.com/tommy-the-runner/tommy-web#readme",
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^1.9.2"
+  }
 }

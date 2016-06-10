@@ -9,6 +9,7 @@ module.exports = function wrapVTreeWithHTMLBoilerplate(vtree, context, config, c
         <link href="/assets/reset.css" rel="stylesheet" type="text/css" />
         <link href="/assets/styles.css" rel="stylesheet" type="text/css" />
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
+        <link href={ config.base_url + "/assets/images/tommy-ico.png" } rel="icon" />
         <meta charset="UTF-8" />
         <title>Tommy the Runner</title>
         <meta name="description" content="Exercise your testing skills with a coding challenge." />

@@ -46,7 +46,7 @@ function getResultElement(res) {
     if (!res.status) {
         return ''
     }
-    
+
     let resultElement = ''
 
     switch(res.status) {

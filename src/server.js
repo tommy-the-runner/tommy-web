@@ -1,7 +1,7 @@
+let fs = require('fs')
 let Cycle = require('@cycle/core')
-let Rx = require('rx')
 let express = require('express')
-let browserify = require('browserify')
+let bundle = require('../bundle')
 let serverConfig = require('config')
 
 let {Observable, ReplaySubject} = require('rx')
@@ -21,9 +21,11 @@ function prependHTML5Doctype(html) {
 
 function wrapAppResultWithBoilerplate(appFn, config$, bundle$) {
     return function wrappedAppFn(sources) {
-        let sinks = appFn(sources)
-        let vtree$ = sinks.DOM
-        let wrappedVTree$ = Observable.combineLatest(vtree$, sinks.context, config$, bundle$,
+        const sinks = appFn(sources)
+        const vtree$ = sinks.DOM
+        const context$ = sinks.context
+
+        const wrappedVTree$ = Observable.combineLatest(vtree$, context$, config$, bundle$,
             wrapVTreeWithHTMLBoilerplate
         )
 
@@ -35,27 +37,15 @@ function wrapAppResultWithBoilerplate(appFn, config$, bundle$) {
 }
 
 let clientBundle$ = (() => {
-    let replaySubject = new ReplaySubject(1)
-    let bundleString = ''
-    let bundleStream = browserify()
-        .transform('babelify')
-        .transform('brfs')
-        .transform({
-            global: true,
-            mangle: {
-                except: ['require']
-            }
-        },
-        'uglifyify')
-        .add('./src/client.js')
-        .bundle()
-    bundleStream.on('data', (data) => {
-        bundleString += data
-    })
-    bundleStream.on('end', () => {
-        replaySubject.onNext(bundleString)
-        replaySubject.onCompleted()
+    const replaySubject = new ReplaySubject(1)
+
+    console.log('Start compilaton of the frontend bundle')
+    const bundleStream = bundle().pipe(fs.createWriteStream(__dirname + '/../build/js/bundle.js'))
+
+    bundleStream.on('finish', () => {
         console.log('Client bundle successfully compiled.')
+        replaySubject.onNext('/assets/js/bundle.js')
+        replaySubject.onCompleted()
     })
     return replaySubject
 })()
@@ -63,7 +53,7 @@ let clientBundle$ = (() => {
 let server = express()
 
 server.use('/assets', express.static(__dirname + '/../public'))
-server.use('/assets', express.static(__dirname + '/../build/css'))
+server.use('/assets', express.static(__dirname + '/../build'))
 
 server.get('/:exerciseSlug', (req, res) => {
 
@@ -101,6 +91,9 @@ server.get('/:exerciseSlug', (req, res) => {
     html$.subscribe(html => res.send(html))
 })
 
-let port = process.env.PORT || 3000
-server.listen(port)
-console.log(`Listening on port ${port}`)
+clientBundle$.subscribe(() => {
+    let port = process.env.PORT || 3000
+    server.listen(port)
+    console.log(`Listening on port ${port}`)
+})
+

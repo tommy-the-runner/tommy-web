@@ -9,8 +9,8 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, 
     return (
       <html lang="en">
       <head>
-        <link href="/assets/reset.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/styles.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/css/reset.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/css/styles.css" rel="stylesheet" type="text/css" />
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
         <link href={ config.base_url + '/assets/images/tommy-ico.png' } rel="icon" />
         <meta charset="UTF-8" />
@@ -41,7 +41,7 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, 
       </div>
       <script>window.appContext = {serialize(context)}</script>
       <script>window.appConfig = {serialize(config)}</script>
-      <script>{clientBundle}</script>
+      <script src={clientBundle}></script>
 
       <div className="footer clearfix">
         <div id="terminal">

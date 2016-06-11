@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "gulp watch",
     "start": "babel-node ./src/server.js",
-    "start:dev": "nodemon ./src/server.js --exec babel-node"
+    "start:dev": "nodemon ./src/server.js --exec babel-node",
+    "lint": "eslint src/**"
   },
   "repository": {
     "type": "git",
@@ -46,6 +47,7 @@
   },
   "homepage": "https://github.com/tommy-the-runner/tommy-web#readme",
   "devDependencies": {
+    "eslint": "^2.12.0",
     "nodemon": "^1.9.2"
   }
 }

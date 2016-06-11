@@ -1,66 +1,73 @@
-let {div, header, footer, button, p, hJSX} = require('@cycle/dom')
-import isolate from '@cycle/isolate';
+import {div, header, footer, button, p, hJSX} from '@cycle/dom'
+import isolate from '@cycle/isolate'
 
 let tommy = require('tommy-the-runner')
 let Rx = require('rx')
 
-function intent({ DOM, context }) {
+function intent({DOM, context}) {
     let buttonClicks$ = DOM.select('.submit-button').events('click')
     let testResult$ = Rx.Observable
         .combineLatest(buttonClicks$, context, (c, ex) => {
             return ex
         })
         .flatMap(ex => {
-            var userCode = document.getElementById('user-code').value
+            const userCode = document.getElementById('user-code').value
             return Rx.Observable.fromPromise(tommy.run(userCode, ex.specsCode))
         })
         .map(reporter => {
-            var stats = reporter.stats
+            const stats = reporter.stats
 
-            var failed = stats.failures
-            var passed = stats.passes
-            var pending = stats.pending
+            const failed = stats.failures
+            const passed = stats.passes
+            const pending = stats.pending
 
-            var numTests = stats.tests
+            const numTests = stats.tests
 
-            var result = { failed, passed, pending, numTests, status: 'unknown' }
+            const result = {failed, passed, pending, numTests, status: 'unknown'}
 
             if (failed > 0) {
                 result.status = 'failed'
             }
 
-            if (passed == numTests) {
+            if (passed === numTests) {
                 result.status = 'passed'
             }
 
             return result
         })
         .catch(err => {
-            return { status: 'error', error: `Execution error: ${err}}` }
+            return {status: 'error', error: `Execution error: ${err}}`}
         })
 
     return testResult$.startWith({})
 }
 
+function getResultElement(res) {
+    let resultElement = ''
+
+    switch(res.status) {
+    case 'error':
+        resultElement = <p className= { res.status }>{ res.error }</p>
+        break
+    case 'passed':
+    case 'failed':
+        resultElement =
+        <p className={ res.status }>
+          {`${res.numTests} test(s) run. ${res.passed} passed, ${res.failed} failed, ${res.pending} pending`}
+        </p>
+        break
+
+    default:
+        resultElement = <p>Unrecognized status: {res.status}</p>
+    }
+
+    return resultElement
+}
+
 function view(testResults$) {
     return testResults$
         .map(res => {
-            var codeTemplate = 'function sum() {\n\n}\n\nmodule.exports = sum'
-
-            var resultElement = ''
-            switch(res.status) {
-                case 'error':
-                    resultElement = (
-                        <p className= { res.status }>{ `${res.error}` }</p>
-                    )
-                    break
-                case 'passed':
-                case 'failed':
-                    resultElement = (
-                        <p className={ res.status }>{`${res.numTests} test(s) run. ${res.passed} passed, ${res.failed} failed, ${res.pending} pending`}</p>
-                    )
-                    break
-            }
+            const codeTemplate = 'function sum() {\n\n}\n\nmodule.exports = sum'
 
             return (
                 <div id="code">
@@ -74,11 +81,11 @@ function view(testResults$) {
                     </div>
                     <footer>
                         <button className="submit-button">Submit</button>
-                        { resultElement }
+                        { getResultElement(res) }
                     </footer>
                 </div>
             )
-    })
+        })
 }
 
 function CodePanel(sources) {

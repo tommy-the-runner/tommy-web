@@ -1,7 +1,7 @@
-let serialize = require('serialize-javascript');
-let { html, head, title, body, div, script, makeHTMLDriver, hJSX } = require('@cycle/dom');
+import serialize from 'serialize-javascript'
+import {html, head, title, body, div, script, hJSX} from '@cycle/dom'
 
-module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, clientBundle}) {
+module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, config, clientBundle}) {
 
     return (
       <html lang="en">
@@ -9,7 +9,7 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, 
         <link href="/assets/reset.css" rel="stylesheet" type="text/css" />
         <link href="/assets/styles.css" rel="stylesheet" type="text/css" />
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
-        <link href={ config.base_url + "/assets/images/tommy-ico.png" } rel="icon" />
+        <link href={ config.base_url + '/assets/images/tommy-ico.png' } rel="icon" />
         <meta charset="UTF-8" />
         <title>Tommy the Runner</title>
         <meta name="description" content="Exercise your testing skills with a coding challenge." />
@@ -18,12 +18,12 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, 
         <meta name="twitter:title" content="Tommy the runner" />
         <meta name="twitter:description" content="Exercise your testing skills with a coding challenge." />
         <meta name="twitter:creator" content="@ertrzyiks" />
-        <meta name="twitter:image" content={ config.base_url + "/assets/images/tommy-image.png" } />
+        <meta name="twitter:image" content={ config.base_url + '/assets/images/tommy-image.png' } />
 
         <meta property="og:title" content="Tommy the Runner" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={ config.base_url + "/" } />
-        <meta property="og:image" content={ config.base_url + "/assets/images/tommy-image.png" } />
+        <meta property="og:url" content={ config.base_url + '/' } />
+        <meta property="og:image" content={ config.base_url + '/assets/images/tommy-image.png' } />
         <meta property="og:description" content="Exercise your testing skills with a coding challenge." />
       </head>
       <body>
@@ -52,4 +52,4 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, 
       </body>
       </html>
     )
-  }
+}

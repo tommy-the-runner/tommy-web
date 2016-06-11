@@ -1,13 +1,13 @@
-let Cycle = require('@cycle/core');
-let {Observable} = require('rx');
-let {makeDOMDriver} = require('@cycle/dom');
-let { makeHTTPDriver } = require('@cycle/http');
-let app = require('./app');
+let Cycle = require('@cycle/core')
+let {Observable} = require('rx')
+let {makeDOMDriver} = require('@cycle/dom')
+let {makeHTTPDriver} = require('@cycle/http')
+let app = require('./app')
 
 function clientSideApp(responses) {
-    let requests = app(responses);
+    let requests = app(responses)
 
-    return requests;
+    return requests
 }
 
 Cycle.run(clientSideApp, {
@@ -16,4 +16,4 @@ Cycle.run(clientSideApp, {
     actions: () => Observable.empty(),
     context: () => Observable.just(window.appContext),
     config: () => Observable.just(window.appConfig)
-});
+})

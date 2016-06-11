@@ -1,17 +1,15 @@
-let Rx = require('rx')
+import {div, header, footer, button, p, hJSX} from '@cycle/dom'
+import isolate from '@cycle/isolate'
 
-let {div, header, footer, button, p, hJSX} = require('@cycle/dom')
-import isolate from '@cycle/isolate';
-
-function intent({ context }) {
+function intent({context}) {
     return context
 }
 
 function view(context$) {
     return context$.map(json => {
-        var specsCodeRaw = json.specsCode || ''
+        const specsCodeRaw = json.specsCode || ''
 
-        var specCode = specsCodeRaw.replace('require(\'subject\')', '/* your code here */')
+        const specCode = specsCodeRaw.replace('require(\'subject\')', '/* your code here */')
 
         return (
             <div id="spec">

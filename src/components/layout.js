@@ -1,7 +1,10 @@
 import serialize from 'serialize-javascript'
 import {html, head, title, body, div, script, hJSX} from '@cycle/dom'
 
-module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, config, clientBundle}) {
+module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, clientBundle}) {
+    const baseTitle = "Tommy the Runner"
+    const extraTitle = ` - ${context.title}`
+    const title = `${baseTitle}${extraTitle}`
 
     return (
       <html lang="en">
@@ -11,16 +14,16 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, config, clientBun
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
         <link href={ config.base_url + '/assets/images/tommy-ico.png' } rel="icon" />
         <meta charset="UTF-8" />
-        <title>Tommy the Runner</title>
+        <title>{title}</title>
         <meta name="description" content="Exercise your testing skills with a coding challenge." />
 
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="Tommy the runner" />
+        <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content="Exercise your testing skills with a coding challenge." />
         <meta name="twitter:creator" content="@ertrzyiks" />
         <meta name="twitter:image" content={ config.base_url + '/assets/images/tommy-image.png' } />
 
-        <meta property="og:title" content="Tommy the Runner" />
+        <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={ config.base_url + '/' } />
         <meta property="og:image" content={ config.base_url + '/assets/images/tommy-image.png' } />
@@ -30,13 +33,13 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, config, clientBun
 
       <header className="top clearfix">
         <img className="logo" src="/assets/images/tommy-logo.png" alt="Tommy the Runner"/>
-        <h2 className="title">Sum two digits</h2>
+        <h2 className="title">{context.title}</h2>
       </header>
 
       <div className="app-container">
         {vtree}
       </div>
-      <script>window.appContext = ##CONTEXT##</script>
+      <script>window.appContext = {serialize(context)}</script>
       <script>window.appConfig = {serialize(config)}</script>
       <script>{clientBundle}</script>
 

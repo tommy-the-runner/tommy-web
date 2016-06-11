@@ -11,13 +11,10 @@ let {makeHTTPDriver} = require('@cycle/http')
 let layout = require('./components/layout')
 let app = require('./app')
 
-function wrapVTreeWithHTMLBoilerplate(vtree, config, clientBundle) {
-    return layout({vtree, config, clientBundle})
+function wrapVTreeWithHTMLBoilerplate(vtree, context, config, clientBundle) {
+    return layout({vtree, context, config, clientBundle})
 }
 
-function injectContext(html, context) {
-    return html.replace('##CONTEXT##', JSON.stringify(context))
-}
 function prependHTML5Doctype(html) {
     return `<!doctype html>${html}`
 }
@@ -26,14 +23,13 @@ function wrapAppResultWithBoilerplate(appFn, config$, bundle$) {
     return function wrappedAppFn(sources) {
         let sinks = appFn(sources)
         let vtree$ = sinks.DOM
-        let wrappedVTree$ = Observable.combineLatest(vtree$, config$, bundle$,
+        let wrappedVTree$ = Observable.combineLatest(vtree$, sinks.context, config$, bundle$,
             wrapVTreeWithHTMLBoilerplate
         )
 
         return {
             DOM: wrappedVTree$,
-            HTTP: sinks.HTTP,
-            context: sinks.context
+            HTTP: sinks.HTTP
         }
     }
 }
@@ -91,7 +87,7 @@ server.get('/:exerciseSlug', (req, res) => {
     })
 
     let wrappedAppFn = wrapAppResultWithBoilerplate(app, config$, clientBundle$)
-    let {sources, sinks} = Cycle.run(wrappedAppFn, {
+    let {sources} = Cycle.run(wrappedAppFn, {
         DOM: makeHTMLDriver(),
         HTTP: makeHTTPDriver(),
         actions: () => actions$,
@@ -99,9 +95,8 @@ server.get('/:exerciseSlug', (req, res) => {
         config: () => config$
     })
 
-    let html$ = Rx.Observable
-        .combineLatest(sources.DOM, sinks.context, injectContext)
-        .map(prependHTML5Doctype)
+    let html$ = sources.DOM
+      .map(prependHTML5Doctype)
 
     html$.subscribe(html => res.send(html))
 })

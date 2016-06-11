@@ -15,6 +15,7 @@ import CodePanel from './components/code_panel.js'
 import SpecsPanel from './components/specs_panel.js'
 
 function renderPageContent(codePanel$, specsPanel$) {
+
     return Rx.Observable.combineLatest(codePanel$, specsPanel$, (codePanel, specsPanel) => (
         <div id="container" className="clearfix">
             { codePanel }
@@ -24,21 +25,24 @@ function renderPageContent(codePanel$, specsPanel$) {
 }
 
 function app(sources) {
-    sources.exercise = sources.HTTP
-        .flatMap(res => res)
-        .map(apiResponse => {
-            return apiResponse.body
-        })
-        .startWith({})
-        .shareReplay(1)
+    const { actions, context, config, DOM, HTTP } = sources
 
-    let codePanel$ = CodePanel(sources)
-    let specsPanel$ = SpecsPanel(sources)
+    const context$ = context
+        .concat(HTTP
+            .flatMap(res => res)
+            .map(apiResponse => {
+                return apiResponse.body
+            })
+            .shareReplay(1)
+        )
 
-    let vtree$ = renderPageContent(codePanel$.DOM, specsPanel$.DOM)
+    const codePanel$ = CodePanel({ DOM, context: context$ })
+    const specsPanel$ = SpecsPanel({ DOM, context: context$ })
 
-    const request$ = Rx.Observable.combineLatest(sources.context, sources.config, (ctx, cfg) => {
-        const exerciseSlug = ctx.exerciseSlug
+    const vtree$ = renderPageContent(codePanel$.DOM, specsPanel$.DOM)
+
+    const request$ = Rx.Observable.combineLatest(actions, config, (action, cfg) => {
+        const exerciseSlug = action.data.exerciseSlug
         const apiUrl = cfg.api_url
 
         return { url: `${apiUrl}?slug=${exerciseSlug}`}
@@ -46,7 +50,8 @@ function app(sources) {
 
     return {
         DOM: vtree$,
-        HTTP: request$
+        HTTP: request$,
+        context: context$
     };
 }
 

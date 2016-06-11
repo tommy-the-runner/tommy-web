@@ -4,9 +4,10 @@ import isolate from '@cycle/isolate';
 let tommy = require('tommy-the-runner')
 let Rx = require('rx')
 
-function intent({ DOM, exercise, context }) {
+function intent({ DOM, context }) {
     let buttonClicks$ = DOM.select('.submit-button').events('click')
-    let testResult$ = Rx.Observable.combineLatest(buttonClicks$, exercise, (c, ex) => {
+    let testResult$ = Rx.Observable
+        .combineLatest(buttonClicks$, context, (c, ex) => {
             return ex
         })
         .flatMap(ex => {
@@ -38,8 +39,7 @@ function intent({ DOM, exercise, context }) {
             return { status: 'error', error: `Execution error: ${err}}` }
         })
 
-    return context
-        .concat(testResult$)
+    return testResult$.startWith({})
 }
 
 function view(testResults$) {

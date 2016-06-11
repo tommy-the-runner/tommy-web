@@ -1,7 +1,7 @@
 let serialize = require('serialize-javascript');
 let { html, head, title, body, div, script, makeHTMLDriver, hJSX } = require('@cycle/dom');
 
-module.exports = function wrapVTreeWithHTMLBoilerplate(vtree, context, config, clientBundle) {
+module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, clientBundle}) {
 
     return (
       <html lang="en">
@@ -36,7 +36,7 @@ module.exports = function wrapVTreeWithHTMLBoilerplate(vtree, context, config, c
       <div className="app-container">
         {vtree}
       </div>
-      <script>window.appContext = {serialize(context)}</script>
+      <script>window.appContext = ##CONTEXT##</script>
       <script>window.appConfig = {serialize(config)}</script>
       <script>{clientBundle}</script>
 

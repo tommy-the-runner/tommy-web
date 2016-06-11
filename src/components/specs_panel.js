@@ -3,12 +3,12 @@ let Rx = require('rx')
 let {div, header, footer, button, p, hJSX} = require('@cycle/dom')
 import isolate from '@cycle/isolate';
 
-function intent({ exercise }) {
-    return exercise
+function intent({ context }) {
+    return context
 }
 
-function view(apiResponse$) {
-    return apiResponse$.map(json => {
+function view(context$) {
+    return context$.map(json => {
         var specsCodeRaw = json.specsCode || ''
 
         var specCode = specsCodeRaw.replace('require(\'subject\')', '/* your code here */')
@@ -30,8 +30,8 @@ function view(apiResponse$) {
 }
 
 function SpecsPanel(sources) {
-    const exercise$ = intent(sources)
-    const vtree$ = view(exercise$)
+    const context$ = intent(sources)
+    const vtree$ = view(context$)
 
     return {
         DOM: vtree$

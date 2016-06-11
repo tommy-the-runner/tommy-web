@@ -13,6 +13,7 @@ function clientSideApp(responses) {
 Cycle.run(clientSideApp, {
     DOM: makeDOMDriver('.app-container'),
     HTTP: makeHTTPDriver(),
+    actions: () => Observable.empty(),
     context: () => Observable.just(window.appContext),
     config: () => Observable.just(window.appConfig)
 });

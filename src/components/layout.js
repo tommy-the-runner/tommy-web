@@ -18,12 +18,12 @@ module.exports = function wrapVTreeWithHTMLBoilerplate(vtree, context, config, c
         <meta name="twitter:title" content="Tommy the runner" />
         <meta name="twitter:description" content="Exercise your testing skills with a coding challenge." />
         <meta name="twitter:creator" content="@ertrzyiks" />
-        <meta name="twitter:image" content={ config.base_url + "/assets/images/tommy-logo-big.png" } />
+        <meta name="twitter:image" content={ config.base_url + "/assets/images/tommy-image.png" } />
 
         <meta property="og:title" content="Tommy the Runner" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={ config.base_url + "/" } />
-        <meta property="og:image" content={ config.base_url + "/assets/images/tommy-logo-big.png" } />
+        <meta property="og:image" content={ config.base_url + "/assets/images/tommy-image.png" } />
         <meta property="og:description" content="Exercise your testing skills with a coding challenge." />
       </head>
       <body>

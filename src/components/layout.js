@@ -26,7 +26,9 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, 
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={ config.base_url + '/' } />
-        <meta property="og:image" content={ config.base_url + '/assets/images/tommy-image.png' } />
+        <meta property="og:image" content={ config.base_url + '/assets/images/tommy-image-fb.png' } />
+        <meta property="og:image:width" content="2680" />
+        <meta property="og:image:height" content="1395" />
         <meta property="og:description" content="Exercise your testing skills with a coding challenge." />
       </head>
       <body>

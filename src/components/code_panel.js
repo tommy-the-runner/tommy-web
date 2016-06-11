@@ -43,12 +43,17 @@ function intent({DOM, context}) {
 }
 
 function getResultElement(res) {
+    if (!res.status) {
+        return ''
+    }
+    
     let resultElement = ''
 
     switch(res.status) {
     case 'error':
         resultElement = <p className= { res.status }>{ res.error }</p>
         break
+
     case 'passed':
     case 'failed':
         resultElement =

@@ -7,7 +7,7 @@
 In separate terminal windows:
 
 - `npm run watch`
-- `npm start`
+- `npm run start:dev`
 
 ## Building assets
 

@@ -32,8 +32,8 @@ function wrapAppResultWithBoilerplate(appFn, config$, bundle$) {
 
         return {
             DOM: wrappedVTree$,
-            HTTP: app.HTTP,
-            context: app.context
+            HTTP: sinks.HTTP,
+            context: sinks.context
         }
     }
 }

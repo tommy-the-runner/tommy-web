@@ -15,7 +15,6 @@ import CodePanel from './components/code_panel.js'
 import SpecsPanel from './components/specs_panel.js'
 
 function renderPageContent(codePanel$, specsPanel$) {
-
     return Rx.Observable.combineLatest(codePanel$, specsPanel$, (codePanel, specsPanel) =>
         <div id="container" className="clearfix">
             { codePanel }

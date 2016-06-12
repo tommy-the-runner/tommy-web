@@ -1,7 +1,7 @@
 import serialize from 'serialize-javascript'
 import {html, head, title, body, div, script, hJSX} from '@cycle/dom'
 
-module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, clientBundle}) {
+module.exports = function wrapVTreeWithHTMLBoilerplate({canonicalUrl, vtree, context, config, clientBundle}) {
     const baseTitle = "Tommy the Runner"
     const extraTitle = ` - ${context.title}`
     const title = `${baseTitle}${extraTitle}`
@@ -25,7 +25,7 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({vtree, context, config, 
 
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={ config.base_url + '/' } />
+        <meta property="og:url" content={ canonicalUrl } />
         <meta property="og:image" content={ config.base_url + '/assets/images/tommy-image-fb.png' } />
         <meta property="og:image:width" content="2680" />
         <meta property="og:image:height" content="1395" />

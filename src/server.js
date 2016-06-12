@@ -11,21 +11,22 @@ let {makeHTTPDriver} = require('@cycle/http')
 let layout = require('./components/layout')
 let app = require('./app')
 
-function wrapVTreeWithHTMLBoilerplate(vtree, context, config, clientBundle) {
-    return layout({vtree, context, config, clientBundle})
+function wrapVTreeWithHTMLBoilerplate(canonicalUrl, vtree, context, config, clientBundle) {
+    return layout({canonicalUrl, vtree, context, config, clientBundle})
 }
 
 function prependHTML5Doctype(html) {
     return `<!doctype html>${html}`
 }
 
-function wrapAppResultWithBoilerplate(appFn, config$, bundle$) {
+function wrapAppResultWithBoilerplate(appFn, canonicalUrl, config$, bundle$) {
     return function wrappedAppFn(sources) {
         const sinks = appFn(sources)
         const vtree$ = sinks.DOM
         const context$ = sinks.context
+        const canonicalUrl$ = Observable.just(canonicalUrl)
 
-        const wrappedVTree$ = Observable.combineLatest(vtree$, context$, config$, bundle$,
+        const wrappedVTree$ = Observable.combineLatest(canonicalUrl$, vtree$, context$, config$, bundle$,
             wrapVTreeWithHTMLBoilerplate
         )
 
@@ -57,6 +58,8 @@ server.use('/assets', express.static(__dirname + '/../build'))
 
 server.get('/:exerciseSlug', (req, res) => {
 
+    console.log(`req: ${req.method} ${req.url} ${req.params.exerciseSlug}`)
+
     // Ignore favicon requests
     if (req.url === '/favicon.ico') {
         res.writeHead(200, {'Content-Type': 'image/x-icon'})
@@ -64,7 +67,7 @@ server.get('/:exerciseSlug', (req, res) => {
         return
     }
 
-    console.log(`req: ${req.method} ${req.url} ${req.params.exerciseSlug}`)
+    const canonicalUrl = `${serverConfig.base_url}${req.url}`
 
     let config$ = Observable.just(Object.assign({}, serverConfig))
 
@@ -76,7 +79,7 @@ server.get('/:exerciseSlug', (req, res) => {
         }
     })
 
-    let wrappedAppFn = wrapAppResultWithBoilerplate(app, config$, clientBundle$)
+    let wrappedAppFn = wrapAppResultWithBoilerplate(app, canonicalUrl, config$, clientBundle$)
     let {sources} = Cycle.run(wrappedAppFn, {
         DOM: makeHTMLDriver(),
         HTTP: makeHTTPDriver(),

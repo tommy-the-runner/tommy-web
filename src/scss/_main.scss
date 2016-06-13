@@ -57,9 +57,8 @@ body {
   padding: 0 10px;
 }
 
-#code textarea {
-  background-color: transparent;
-  font-family: Consolas, monaco, monospace;
+#code .ace_editor,
+#spec .ace_editor {
   position: absolute;
   top: 3em;
   left: 0;
@@ -110,7 +109,7 @@ body {
   width: 100%;
   position: absolute;
   bottom: 0;
-  top: 3em;
+  top: 0;
 }
 
 .spec-body, .code {

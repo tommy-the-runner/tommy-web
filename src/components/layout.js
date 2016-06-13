@@ -41,18 +41,10 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({canonicalUrl, vtree, con
       <div className="app-container">
         {vtree}
       </div>
+      
       <script>window.appContext = {serialize(context)}</script>
       <script>window.appConfig = {serialize(config)}</script>
       <script src={clientBundle}></script>
-
-      <div className="footer clearfix">
-        <div id="terminal">
-          <span>{ '>_ I\'m the terminal' }</span>
-        </div>
-        <div className="copyright">
-          <span>Copyright @ 2016</span>
-        </div>
-      </div>
 
       </body>
       </html>

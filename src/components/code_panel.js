@@ -1,104 +1,85 @@
 import {div, header, footer, button, p, hJSX} from '@cycle/dom'
 import isolate from '@cycle/isolate'
+import AceEditor from 'cyclejs-ace-editor'
 
 let tommy = require('tommy-the-runner')
-let Rx = require('rx')
+let {Observable, ReplaySubject} = require('rx')
 
-function intent({DOM, context}) {
-    let buttonClicks$ = DOM.select('.submit-button').events('click')
-    let testResult$ = Rx.Observable
-        .combineLatest(buttonClicks$, context, (c, ex) => {
-            return ex
-        })
-        .flatMap(ex => {
-            const userCode = document.getElementById('user-code').value
-            return Rx.Observable.fromPromise(tommy.run(userCode, ex.specsCode))
-        })
-        .map(reporter => {
-            const stats = reporter.stats
+function intent({DOM, context, specCode$}) {
+    const buttonClicks$ = DOM.select('.submit-button').events('click')
 
-            const failed = stats.failures
-            const passed = stats.passes
-            const pending = stats.pending
-
-            const numTests = stats.tests
-
-            const result = {failed, passed, pending, numTests, status: 'unknown'}
-
-            if (failed > 0) {
-                result.status = 'failed'
-            }
-
-            if (passed === numTests) {
-                result.status = 'passed'
-            }
-
-            return result
-        })
-        .catch(err => {
-            return {status: 'error', error: `Execution error: ${err}}`}
-        })
-
-    return testResult$.startWith({})
+    return {
+        buttonClicks$,
+        specCode$
+    }
 }
 
-function getResultElement(res) {
-    if (!res.status) {
-        return ''
-    }
+function model(sources) {
+    const {buttonClicks$, subjectCode$, specCode$} = sources
 
-    let resultElement = ''
+    const subject$ = new ReplaySubject(1)
 
-    switch(res.status) {
-    case 'error':
-        resultElement = <p className= { res.status }>{ res.error }</p>
-        break
+    const programs$ = Observable
+        .combineLatest(subjectCode$, specCode$, (userCode, specsCode) => {
+            return {userCode, specsCode}
+        })
+       .multicast(subject$)
 
-    case 'passed':
-    case 'failed':
-        resultElement =
-        <p className={ res.status }>
-          {`${res.numTests} test(s) run. ${res.passed} passed, ${res.failed} failed, ${res.pending} pending`}
-        </p>
-        break
+    programs$.connect()
+    const testResults$ = buttonClicks$
+        .flatMap(() => subject$.take(1))
+        .flatMap(({userCode, specsCode}) => {
+            let promise = tommy.run(userCode, specsCode)
+            return Observable.fromPromise(promise)
+        })
 
-    default:
-        resultElement = <p>Unrecognized status: {res.status}</p>
-    }
-
-    return resultElement
-}
-
-function view(testResults$) {
     return testResults$
-        .map(res => {
-            const codeTemplate = 'function sum() {\n\n}\n\nmodule.exports = sum'
+}
 
-            return (
-                <div id="code">
-                    <header>
-                        <div className="container-header">
-                            Your code
-                        </div>
-                    </header>
-                    <div className="code">
-                        <textarea id="user-code">{ codeTemplate }</textarea>
+function view(subjectCodeEditor) {
+
+    return Observable
+        .just(
+            <div id="code">
+                <header>
+                    <div className="container-header">
+                        Your code
                     </div>
-                    <footer>
-                        <button className="submit-button">Submit</button>
-                        { getResultElement(res) }
-                    </footer>
+                </header>
+                <div className="code">
+                    { subjectCodeEditor.DOM }
                 </div>
-            )
-        })
+                <footer>
+                    <button className="submit-button">Submit</button>
+                </footer>
+            </div>
+        )
 }
 
 function CodePanel(sources) {
-    const testResult$ = intent(sources)
-    const vtree$ = view(testResult$)
+    const codeTemplate = 'function sum() {\n\n}\n\nmodule.exports = sum'
+
+    const {DOM} = sources
+    const initialValue$ = Observable.just(codeTemplate)
+
+    const {buttonClicks$, specCode$} = intent(sources)
+
+    const params$ = Observable.just({
+      theme: 'ace/theme/monokai',
+      mode: 'ace/mode/javascript'
+    })
+
+    const subjectCodeEditor = AceEditor({DOM, initialValue$, params$})
+    const testResults$ = model({
+        buttonClicks$,
+        subjectCode$: subjectCodeEditor.value$,
+        specCode$
+    })
+    const vtree$ = view(subjectCodeEditor)
 
     return {
-        DOM: vtree$
+        DOM: vtree$,
+        testResults: testResults$
     }
 }
 

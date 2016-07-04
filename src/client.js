@@ -4,6 +4,10 @@ let {makeDOMDriver} = require('@cycle/dom')
 let {makeHTTPDriver} = require('@cycle/http')
 let app = require('./app')
 
+// Ace editor settings
+require('brace/mode/javascript')
+require('brace/theme/monokai')
+
 function clientSideApp(responses) {
     let requests = app(responses)
 

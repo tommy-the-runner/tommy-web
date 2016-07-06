@@ -1,6 +1,6 @@
-# tommy-web
+# tommy-web [![CircleCI](https://circleci.com/gh/tommy-the-runner/tommy-web/tree/master.svg?style=svg)](https://circleci.com/gh/tommy-the-runner/tommy-web/tree/master)
 
-# Development
+## Development
 
 - `npm install`
 

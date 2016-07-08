@@ -194,20 +194,24 @@ body {
   box-sizing: border-box;
 }
 
-.passed {
+.status-passed {
   color: #7CFC00;
 }
 
-.failed {
+.status-failed {
   color: #FF0000;
 }
 
-.pending {
+.status-pending {
   color: #00FFFF;
 }
 
-.error {
+.status-error {
   color: #FF4500;
+}
+
+.summary {
+  margin-top: 20px;
 }
 
 .clearfix:after {

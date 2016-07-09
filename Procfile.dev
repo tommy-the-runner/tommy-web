@@ -1,0 +1,2 @@
+server: env PORT=3000 nodemon ./src/server.js --exec babel-node
+watch: npm run watch

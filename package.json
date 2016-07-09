@@ -2,14 +2,18 @@
   "name": "tommy-web",
   "version": "0.0.1",
   "description": "",
+  "engines": {
+    "node": "6.0.0",
+    "npm": "3.8.6"
+  },
   "main": "index.js",
   "scripts": {
-    "build": "gulp",
-    "prestart": "npm run build",
     "test": "echo \"Error: no test specified\"",
+    "build": "gulp build",
+    "postbuild": "gulp revision",
     "watch": "gulp watch",
-    "start": "babel-node ./src/server.js",
-    "start:dev": "nodemon ./src/server.js --exec babel-node",
+    "start": "npm run build && babel-node ./src/server.js",
+    "start:dev": "npm run build && nf start --procfile=Procfile.dev",
     "lint": "eslint src/**"
   },
   "repository": {
@@ -32,16 +36,19 @@
     "browserify": "^13.0.0",
     "config": "^1.20.4",
     "cyclejs-ace-editor": "0.0.4",
+    "del": "^2.2.1",
     "express": "^4.12.3",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-rev": "^7.1.0",
     "gulp-sass": "^2.3.1",
     "js-yaml": "^3.6.1",
     "react-proxy": "^1.1.8",
     "rx": "4.0.6",
     "serialize-javascript": "^1.0.0",
     "tommy-the-runner": "0.0.3",
-    "uglifyify": "^3.0.1"
+    "uglifyify": "^3.0.1",
+    "vinyl-source-stream": "^1.1.0"
   },
   "bugs": {
     "url": "https://github.com/tommy-the-runner/tommy-web/issues"
@@ -49,6 +56,9 @@
   "homepage": "https://github.com/tommy-the-runner/tommy-web#readme",
   "devDependencies": {
     "eslint": "^2.12.0",
-    "nodemon": "^1.9.2"
+    "foreman": "^1.4.1",
+    "gulp-util": "^3.0.7",
+    "nodemon": "^1.9.2",
+    "watchify": "^3.7.0"
   }
 }

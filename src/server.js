@@ -1,7 +1,6 @@
 let fs = require('fs')
 let Cycle = require('@cycle/core')
 let express = require('express')
-let bundle = require('../bundle')
 let serverConfig = require('config')
 
 let {Observable, ReplaySubject} = require('rx')
@@ -38,17 +37,18 @@ function wrapAppResultWithBoilerplate(appFn, canonicalUrl, config$, bundle$) {
 }
 
 let clientBundle$ = (() => {
-    const replaySubject = new ReplaySubject(1)
-
-    console.log('Start compilaton of the frontend bundle')
-    const bundleStream = bundle().pipe(fs.createWriteStream(__dirname + '/../build/js/bundle.js'))
-
-    bundleStream.on('finish', () => {
-        console.log('Client bundle successfully compiled.')
-        replaySubject.onNext('/assets/js/bundle.js')
-        replaySubject.onCompleted()
-    })
-    return replaySubject
+    // const replaySubject = new ReplaySubject(1)
+    //
+    // console.log('Start compilaton of the frontend bundle')
+    // const bundleStream = bundle().pipe(fs.createWriteStream(__dirname + '/../build/js/bundle.js'))
+    //
+    // bundleStream.on('finish', () => {
+    //     console.log('Client bundle successfully compiled.')
+    //     replaySubject.onNext('/assets/js/bundle.js')
+    //     replaySubject.onCompleted()
+    // })
+    // return replaySubject
+    return Observable.just('/assets/js/bundle.js')
 })()
 
 let server = express()

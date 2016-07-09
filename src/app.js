@@ -54,7 +54,6 @@ function model({ctrlSaves$, buttonClicks$, specCode$, subjectCode$}) {
 
     const programs$ = Observable
         .combineLatest(subjectCode$, specCode$, (userCode, specsCode) => {
-            console.log(userCode, specsCode)
             return {userCode, specsCode}
         })
         .multicast(sourceCodes$)
@@ -65,7 +64,6 @@ function model({ctrlSaves$, buttonClicks$, specCode$, subjectCode$}) {
         .debounce(20)
         .flatMap(() => sourceCodes$.take(1))
         .flatMap(({userCode, specsCode}) => {
-            console.log(userCode, specsCode)
             return executeSpecs(userCode, specsCode)
         })
 

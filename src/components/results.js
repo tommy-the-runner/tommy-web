@@ -1,4 +1,4 @@
-import Rx from 'rx'
+import {Observable, Subject} from 'rx'
 import {p, hJSX} from '@cycle/dom'
 import isolate from '@cycle/isolate'
 
@@ -6,74 +6,96 @@ function intent({testResults}) {
   return testResults
 }
 
-function model({testResults}) {
-  const testReport = testResults
+function getTests(suite) {
+  const tests = Observable.from(suite.tests)
+  const subsuites = suite.suites
+    .map(s => getTests(s))
+
+  const childrenTests = Observable.from(subsuites).concatAll()
+
+  return tests.concat(childrenTests)
+}
+
+function model({testResults$}) {
+  const executionErrors$ = testResults$
+    .filter(res => res.type == 'error')
+    .map(res => res.err)
+
+  const executionReports$ = testResults$
+    .filter(res => res.type == 'report')
+    .map(res => res.reporter)
+
+  const testReport$ = executionReports$
     .map(reporter => {
-      const stats = reporter.stats
-
-      const failed = stats.failures
-      const passed = stats.passes
-      const pending = stats.pending
-
-      const numTests = stats.tests
-
-      const result = {failed, passed, pending, numTests, status: 'unknown'}
-
-      if (failed > 0) {
-        result.status = 'failed'
-      }
-
-      if (passed === numTests) {
-        result.status = 'passed'
-      }
-
-      return result
+      return getTests(reporter.runner.suite)
     })
-    .catch(err => {
-      return {status: 'error', error: `Execution error: ${err}}`}
-    })
-    .startWith({})
+
+  .startWith(Observable.empty())
+
+  const stats$ = executionReports$
+    .map(reporter => reporter.stats)
+    .startWith(false)
 
   return {
-    testReport
+    executionReports$,
+    executionErrors$,
+    testReport$,
+    stats$
   }
 }
-function getResultElement(res) {
-  let resultElement = <p>&gt; </p>
 
-  if (!res.status) {
-    return resultElement
-  }
+function viewSpecs(tests$) {
+  return tests$
+    .concatMap(test => {
+      let lines = []
 
-  switch(res.status) {
-    case 'error':
-      resultElement = <p className={ res.status }>{ res.error }</p>
-      break
+      lines = lines.concat(<p className={`status-${test.state}`}>{test.title}</p>)
 
-    case 'passed':
-    case 'failed':
-      resultElement =
-        <p className={ res.status }>
-          {`${res.numTests} test(s) run. ${res.passed} passed, ${res.failed} failed, ${res.pending} pending`}
-        </p>
-      break
+      if (test.state == 'failed') {
+        lines = lines.concat(<pre className={`status-${test.state}`}>    {test.err.message}</pre>)
+      }
 
-    default:
-      resultElement = <p>Unrecognized status: {res.status}</p>
-  }
-
-  return resultElement
+      return Observable.from(lines)
+    })
+    .toArray()
+    .map(results => <div>{results}</div>)
 }
 
-function view(testReport) {
-  const vtree$ = testReport.map(getResultElement)
-  return vtree$
+function viewSummary(stats$) {
+  return stats$.map(stats => {
+    if (!stats) {
+      return ''
+    }
+
+    const statusClassName = (stats.failures > 0) ? 'status-failed' : 'status-passed'
+
+    return <p className={`summary ${statusClassName}`}>
+      {`${stats.tests} test(s) run. ${stats.passes} passed, ${stats.failures} failed, ${stats.pending} pending`}
+    </p>
+  })
+}
+
+function view({testReport$, executionErrors$, stats$}) {
+  const specResultsVtree$ = Observable
+    .zip(testReport$, stats$, (tests$, stats) => {
+      const specs$ = viewSpecs(tests$)
+      const summary$ = viewSummary(Observable.just(stats))
+
+      return Observable.from([specs$, summary$]).concatAll().toArray().map(els => <div>{els}</div>)
+    })
+    .concatAll()
+
+  const executionErrorsVtree$ = executionErrors$.map(err => {
+    return <p className='summary status-failed'>{err.message} {err.stack}</p>
+  })
+
+  return Observable.merge(specResultsVtree$, executionErrorsVtree$)
 }
 
 function Results(sources) {
   const testResults$ = intent(sources)
-  const testReport = model({testResults: testResults$}).testReport
-  const vtree$ = view(testReport)
+  const {testReport$, executionErrors$, stats$} = model({testResults$})
+  const vtree$ = view({testReport$, executionErrors$, stats$})
 
   return {
     DOM: vtree$

@@ -2,38 +2,14 @@ import {div, header, footer, button, p, hJSX} from '@cycle/dom'
 import isolate from '@cycle/isolate'
 import AceEditor from 'cyclejs-ace-editor'
 
-let tommy = require('tommy-the-runner')
-let {Observable, ReplaySubject} = require('rx')
+let {Observable} = require('rx')
 
-function intent({DOM, context, specCode$}) {
+function intent({DOM}) {
     const buttonClicks$ = DOM.select('.submit-button').events('click')
 
     return {
-        buttonClicks$,
-        specCode$
+        buttonClicks$
     }
-}
-
-function model(sources) {
-    const {buttonClicks$, subjectCode$, specCode$} = sources
-
-    const subject$ = new ReplaySubject(1)
-
-    const programs$ = Observable
-        .combineLatest(subjectCode$, specCode$, (userCode, specsCode) => {
-            return {userCode, specsCode}
-        })
-       .multicast(subject$)
-
-    programs$.connect()
-    const testResults$ = buttonClicks$
-        .flatMap(() => subject$.take(1))
-        .flatMap(({userCode, specsCode}) => {
-            let promise = tommy.run(userCode, specsCode)
-            return Observable.fromPromise(promise)
-        })
-
-    return testResults$
 }
 
 function view(subjectCodeEditor) {
@@ -62,7 +38,7 @@ function CodePanel(sources) {
     const {DOM} = sources
     const initialValue$ = Observable.just(codeTemplate)
 
-    const {buttonClicks$, specCode$} = intent(sources)
+    const {buttonClicks$} = intent(sources)
 
     const params$ = Observable.just({
       theme: 'ace/theme/monokai',
@@ -70,16 +46,12 @@ function CodePanel(sources) {
     })
 
     const subjectCodeEditor = AceEditor({DOM, initialValue$, params$})
-    const testResults$ = model({
-        buttonClicks$,
-        subjectCode$: subjectCodeEditor.value$,
-        specCode$
-    })
     const vtree$ = view(subjectCodeEditor)
 
     return {
         DOM: vtree$,
-        testResults: testResults$
+        buttonClicks$: buttonClicks$,
+        code$: subjectCodeEditor.value$
     }
 }
 

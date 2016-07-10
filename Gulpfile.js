@@ -1,12 +1,11 @@
 const gulp = require('gulp')
-const gutil = require('gulp-util')
-const sass = require('gulp-sass')
-const autoprefixer = require('gulp-autoprefixer')
-const rev = require('gulp-rev')
+const plugins = require('gulp-load-plugins')()
 const source = require('vinyl-source-stream')
 const del = require('del')
 const createBundler = require('./create_bundler')
-const uglifycss = require('gulp-uglifycss');
+
+const {rev, uglifycss, autoprefixer, sass} = plugins
+const gutil = plugins.util
 
 gulp.task('default', ['build'])
 gulp.task('build', ['sass', 'browserify'])

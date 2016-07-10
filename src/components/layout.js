@@ -6,11 +6,14 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({canonicalUrl, vtree, con
     const extraTitle = ` - ${context.title}`
     const title = `${baseTitle}${extraTitle}`
 
+    const jsBundle = `/assets/${clientBundle['js/bundle.js']}`
+    const cssBundle = `/assets/${clientBundle['css/styles.css']}`
+
     return (
       <html lang="en">
       <head>
         <link href="/assets/css/reset.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/styles.css" rel="stylesheet" type="text/css" />
+        <link href={cssBundle} rel="stylesheet" type="text/css" />
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
         <link href={ config.base_url + '/assets/images/tommy-ico.png' } rel="icon" />
         <meta charset="UTF-8" />
@@ -44,7 +47,7 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({canonicalUrl, vtree, con
       
       <script>window.appContext = {serialize(context)}</script>
       <script>window.appConfig = {serialize(config)}</script>
-      <script src={clientBundle}></script>
+      <script src={jsBundle}></script>
 
       </body>
       </html>

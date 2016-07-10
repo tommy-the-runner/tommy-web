@@ -36,20 +36,20 @@ function wrapAppResultWithBoilerplate(appFn, canonicalUrl, config$, bundle$) {
     }
 }
 
-let clientBundle$ = (() => {
-    // const replaySubject = new ReplaySubject(1)
-    //
-    // console.log('Start compilaton of the frontend bundle')
-    // const bundleStream = bundle().pipe(fs.createWriteStream(__dirname + '/../build/js/bundle.js'))
-    //
-    // bundleStream.on('finish', () => {
-    //     console.log('Client bundle successfully compiled.')
-    //     replaySubject.onNext('/assets/js/bundle.js')
-    //     replaySubject.onCompleted()
-    // })
-    // return replaySubject
-    return Observable.just('/assets/js/bundle.js')
-})()
+let clientBundle$ = Observable
+    .create(observer => {
+        try {
+            const json = require('../rev-manifest.json')
+            observer.onNext(json)
+        } catch (err) {
+            observer.onError(err)
+        }
+        observer.onCompleted()
+    })
+    .catch(err => Observable.just({
+        'js/bundle.js': 'js/bundle.js',
+        'css/styles.css': 'css/styles.css'
+    }))
 
 let server = express()
 

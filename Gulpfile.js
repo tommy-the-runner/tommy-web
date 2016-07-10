@@ -6,6 +6,7 @@ const rev = require('gulp-rev')
 const source = require('vinyl-source-stream')
 const del = require('del')
 const createBundler = require('./create_bundler')
+const uglifycss = require('gulp-uglifycss');
 
 gulp.task('default', ['build'])
 gulp.task('build', ['sass', 'browserify'])
@@ -39,6 +40,9 @@ gulp.task('sass', function () {
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
+        }))
+        .pipe(uglifycss({
+          "maxLineLen": 80
         }))
         .pipe(gulp.dest('./build/css'))
 })

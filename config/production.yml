@@ -1,2 +1,5 @@
+base_url: http://tommy-web.ertrzyiks.me
+api_url: http://tommy-api.ertrzyiks.me/v1/exercises
+
 statsd:
   enabled: true

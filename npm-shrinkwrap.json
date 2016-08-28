@@ -4305,6 +4305,11 @@
       "from": "slide@>=1.1.5 <2.0.0",
       "resolved": "https://registry.npmjs.org/slide/-/slide-1.1.6.tgz"
     },
+    "slugify": {
+      "version": "1.0.2",
+      "from": "slugify@latest",
+      "resolved": "https://registry.npmjs.org/slugify/-/slugify-1.0.2.tgz"
+    },
     "sntp": {
       "version": "1.0.9",
       "from": "sntp@>=1.0.0 <2.0.0",
@@ -4439,6 +4444,11 @@
           "resolved": "https://registry.npmjs.org/xtend/-/xtend-2.1.2.tgz"
         }
       }
+    },
+    "statsd-client": {
+      "version": "0.2.2",
+      "from": "statsd-client@latest",
+      "resolved": "https://registry.npmjs.org/statsd-client/-/statsd-client-0.2.2.tgz"
     },
     "statuses": {
       "version": "1.2.1",

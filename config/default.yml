@@ -1,2 +1,8 @@
 base_url: http://localhost:3000
 api_url: http://localhost:3001/v1/exercises
+
+statsd:
+  enabled: false
+  host: '127.0.0.1'
+  port: 8125
+  prefix: 'tommy-web'

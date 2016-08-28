@@ -53,6 +53,16 @@ let clientBundle$ = Observable
 
 let server = express()
 
+if (serverConfig.get('statsd.enabled')) {
+    let statsdMiddleware = require('../middlewares/statsd.js')
+
+    server.use(statsdMiddleware({
+        host: serverConfig.get('statsd.host'),
+        port: serverConfig.get('statsd.port'),
+        prefix: serverConfig.get('statsd.prefix')
+    }))
+}
+
 server.use('/assets', express.static(__dirname + '/../public'))
 server.use('/assets', express.static(__dirname + '/../build'))
 

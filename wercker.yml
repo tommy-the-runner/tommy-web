@@ -1,0 +1,27 @@
+box: node:6
+
+build:
+  steps:
+    - npm-install
+    - npm-test
+
+    - script:
+        name: echo nodejs information
+        code: |
+          echo "node version $(node -v) running"
+          echo "npm version $(npm -v) running"
+
+deploy:
+  steps:
+    - add-to-known_hosts:
+        hostname: $GIT_DEPLOY_HOST
+
+    - add-ssh-key:
+        keyname: DIGITAL_OCEAN
+
+    - script:
+        name: push to dokku
+        code: |
+          echo "Pushing to: $GIT_DEPLOY_USER@$GIT_DEPLOY_HOST:$GIT_DEPLOY_APP"
+          git remote add dokku $GIT_DEPLOY_USER@$GIT_DEPLOY_HOST:$GIT_DEPLOY_APP
+          git push dokku HEAD:master -f

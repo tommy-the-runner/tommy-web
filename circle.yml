@@ -1,8 +1,0 @@
-machine:
-  node:
-    version: 6.0.0
-deployment:
-  production:
-    branch: master
-    commands:
-      - sh ./scripts/deploy.sh

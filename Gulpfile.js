@@ -53,7 +53,12 @@ gulp.task('revision:clear', function () {
 })
 
 gulp.task('revision', function () {
-  return gulp.src(['build/css/*.css', 'build/js/*.js'], {base: 'assets'})
+  const assets = [
+    'build/css/styles.css',
+    'build/js/bundle.js'
+  ]
+  
+  return gulp.src(assets, {base: 'assets'})
     .pipe(gulp.dest('build'))
     .pipe(rev())
     .pipe(gulp.dest('build'))

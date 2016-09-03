@@ -1,6 +1,7 @@
 import {Observable, Subject} from 'rx'
 import {p, hJSX} from '@cycle/dom'
 import isolate from '@cycle/isolate'
+import {parse} from '../services/stacktrace'
 
 function intent({testResults}) {
   return testResults
@@ -52,7 +53,9 @@ function viewSpecs(tests$) {
       lines = lines.concat(<p className={`status-${test.state}`}>{test.title}</p>)
 
       if (test.state == 'failed') {
+        const stacktrace = parse(test.err.stack)
         lines = lines.concat(<pre className={`status-${test.state}`}>    {test.err.message}</pre>)
+        lines = lines.concat(stacktrace.map(line => <pre className={`status-${test.state}`}>    {line}</pre>))
       }
 
       return Observable.from(lines)
@@ -86,7 +89,11 @@ function view({testReport$, executionErrors$, stats$}) {
     .concatAll()
 
   const executionErrorsVtree$ = executionErrors$.map(err => {
-    return <p className='summary status-failed'>{err.message} {err.stack}</p>
+    return <p className='summary status-failed'>
+      {err.message} <br/>
+      <br/>
+      <pre>{err.stack}</pre>
+    </p>
   })
 
   return Observable.merge(specResultsVtree$, executionErrorsVtree$)

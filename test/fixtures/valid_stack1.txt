@@ -1,0 +1,11 @@
+ReferenceError: a is not defined
+    at sum (eval at compile (assets/js/bundle.js:82253:14), <anonymous>:6:2)
+    at Context.eval (eval at compile (assets/js/bundle.js:82253:14), <anonymous>:18:12)
+    at callFn (assets/js/bundle.js:60718:21)
+    at Test.Runnable.run (assets/js/bundle.js:60711:7)
+    at Runner.runTest (assets/js/bundle.js:61181:10)
+    at assets/js/bundle.js:61287:12
+    at next (assets/js/bundle.js:61101:14)
+    at assets/js/bundle.js:61111:7
+    at next (assets/js/bundle.js:61043:14)
+    at assets/js/bundle.js:61079:5

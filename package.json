@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
+    "test": "mocha --compilers js:babel-core/register test/**/*_spec.js",
     "build": "gulp build",
     "postbuild": "gulp revision",
     "watch": "gulp watch",
@@ -59,9 +59,11 @@
   },
   "homepage": "https://github.com/tommy-the-runner/tommy-web#readme",
   "devDependencies": {
+    "chai": "^3.5.0",
     "eslint": "^2.12.0",
     "foreman": "^1.4.1",
     "gulp-util": "^3.0.7",
+    "mocha": "^3.0.2",
     "nodemon": "^1.9.2",
     "watchify": "^3.7.0"
   }

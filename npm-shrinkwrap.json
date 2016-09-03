@@ -625,6 +625,11 @@
       "from": "browser-split@0.0.1",
       "resolved": "https://registry.npmjs.org/browser-split/-/browser-split-0.0.1.tgz"
     },
+    "browser-stdout": {
+      "version": "1.3.0",
+      "from": "browser-stdout@1.3.0",
+      "resolved": "https://registry.npmjs.org/browser-stdout/-/browser-stdout-1.3.0.tgz"
+    },
     "browserify": {
       "version": "13.0.1",
       "from": "browserify@>=13.0.0 <14.0.0",
@@ -2949,6 +2954,11 @@
       "from": "json-stringify-safe@>=5.0.1 <5.1.0",
       "resolved": "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz"
     },
+    "json3": {
+      "version": "3.3.2",
+      "from": "json3@3.3.2",
+      "resolved": "https://registry.npmjs.org/json3/-/json3-3.3.2.tgz"
+    },
     "json5": {
       "version": "0.4.0",
       "from": "json5@>=0.4.0 <0.5.0",
@@ -3046,6 +3056,11 @@
       "from": "lodash._basecopy@>=3.0.0 <4.0.0",
       "resolved": "https://registry.npmjs.org/lodash._basecopy/-/lodash._basecopy-3.0.1.tgz"
     },
+    "lodash._basecreate": {
+      "version": "3.0.3",
+      "from": "lodash._basecreate@>=3.0.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/lodash._basecreate/-/lodash._basecreate-3.0.3.tgz"
+    },
     "lodash._baseslice": {
       "version": "4.0.0",
       "from": "lodash._baseslice@>=4.0.0 <4.1.0",
@@ -3105,6 +3120,11 @@
       "version": "3.2.0",
       "from": "lodash.assign@>=3.0.0 <4.0.0",
       "resolved": "https://registry.npmjs.org/lodash.assign/-/lodash.assign-3.2.0.tgz"
+    },
+    "lodash.create": {
+      "version": "3.1.1",
+      "from": "lodash.create@3.1.1",
+      "resolved": "https://registry.npmjs.org/lodash.create/-/lodash.create-3.1.1.tgz"
     },
     "lodash.defaults": {
       "version": "3.1.2",
@@ -3325,34 +3345,24 @@
       }
     },
     "mocha": {
-      "version": "2.5.3",
-      "from": "mocha@>=2.4.5 <3.0.0",
-      "resolved": "https://registry.npmjs.org/mocha/-/mocha-2.5.3.tgz",
+      "version": "3.0.2",
+      "from": "mocha@latest",
+      "resolved": "https://registry.npmjs.org/mocha/-/mocha-3.0.2.tgz",
       "dependencies": {
-        "commander": {
-          "version": "2.3.0",
-          "from": "commander@2.3.0",
-          "resolved": "https://registry.npmjs.org/commander/-/commander-2.3.0.tgz"
-        },
-        "escape-string-regexp": {
-          "version": "1.0.2",
-          "from": "escape-string-regexp@1.0.2",
-          "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.2.tgz"
-        },
         "glob": {
-          "version": "3.2.11",
-          "from": "glob@3.2.11",
-          "resolved": "https://registry.npmjs.org/glob/-/glob-3.2.11.tgz"
+          "version": "7.0.5",
+          "from": "glob@7.0.5",
+          "resolved": "https://registry.npmjs.org/glob/-/glob-7.0.5.tgz"
         },
         "minimatch": {
-          "version": "0.3.0",
-          "from": "minimatch@>=0.3.0 <0.4.0",
-          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz"
+          "version": "3.0.3",
+          "from": "minimatch@>=3.0.2 <4.0.0",
+          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-3.0.3.tgz"
         },
         "supports-color": {
-          "version": "1.2.0",
-          "from": "supports-color@1.2.0",
-          "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-1.2.0.tgz"
+          "version": "3.1.2",
+          "from": "supports-color@3.1.2",
+          "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-3.1.2.tgz"
         }
       }
     },
@@ -4696,7 +4706,39 @@
     },
     "tommy-the-runner": {
       "version": "0.0.3",
-      "from": "tommy-the-runner@0.0.3"
+      "from": "tommy-the-runner@0.0.3",
+      "dependencies": {
+        "commander": {
+          "version": "2.3.0",
+          "from": "commander@2.3.0",
+          "resolved": "https://registry.npmjs.org/commander/-/commander-2.3.0.tgz"
+        },
+        "escape-string-regexp": {
+          "version": "1.0.2",
+          "from": "escape-string-regexp@1.0.2",
+          "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.2.tgz"
+        },
+        "glob": {
+          "version": "3.2.11",
+          "from": "glob@3.2.11",
+          "resolved": "https://registry.npmjs.org/glob/-/glob-3.2.11.tgz"
+        },
+        "minimatch": {
+          "version": "0.3.0",
+          "from": "minimatch@>=0.3.0 <0.4.0",
+          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz"
+        },
+        "mocha": {
+          "version": "2.5.3",
+          "from": "mocha@>=2.4.5 <3.0.0",
+          "resolved": "https://registry.npmjs.org/mocha/-/mocha-2.5.3.tgz"
+        },
+        "supports-color": {
+          "version": "1.2.0",
+          "from": "supports-color@1.2.0",
+          "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-1.2.0.tgz"
+        }
+      }
     },
     "touch": {
       "version": "1.0.0",

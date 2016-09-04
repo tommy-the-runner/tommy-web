@@ -1,0 +1,27 @@
+.terminal {
+  position: relative;
+  background-color: #222222;
+  color: #EEEEEE;
+  min-height: 10em;
+  font-family: Consolas, monaco, monospace;
+  padding: 10px;
+
+  &:before {
+    content: '';
+    background: #8257e8;
+    opacity: 0.9;
+    top: -3px;
+    left: 0;
+    height: 6px;
+    width: 100%;
+    position: absolute;
+    transform: translate3d(-100%, 0, 0);
+    transform-origin: 0 0;
+  }
+
+  &.is-active:before {
+    transition: transform 800ms ease-out, background 800ms ease-in;
+    background: #c9cfff;
+    transform: translate3d(100%, 0, 0);
+  }
+}

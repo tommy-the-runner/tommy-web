@@ -97,12 +97,22 @@ function view({testReport$, executionErrors$, stats$}) {
   })
 
   return Observable.merge(specResultsVtree$, executionErrorsVtree$)
+    .map(el => <div className="terminal">{el}</div>)
 }
 
 function Results(sources) {
   const testResults$ = intent(sources)
   const {testReport$, executionErrors$, stats$} = model({testResults$})
   const vtree$ = view({testReport$, executionErrors$, stats$})
+
+  sources.DOM.select('.terminal').observable
+    .filter(els => els.length)
+    .map(els => els[0])
+    .skip(1)
+    .subscribe(el => {
+      el.classList.remove('is-active')
+      setTimeout(() => { el.classList.add('is-active') }, 50)
+    })
 
   return {
     DOM: vtree$

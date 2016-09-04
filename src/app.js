@@ -81,8 +81,8 @@ function renderPageContent(codePanel$, specsPanel$, $results) {
             </div>
 
             <div className="footer clearfix">
-                <div id="terminal">
-                    <span>{ results }</span>
+                <div>
+                    { results }
                 </div>
                 <div className="copyright">
                     <span>Copyright @ 2016</span>

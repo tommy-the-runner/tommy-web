@@ -141,14 +141,7 @@ body {
   bottom: 0;
   width: 100%;
   box-sizing: border-box;
-}
-
-#terminal {
-  background-color: #222222;
-  color: #EEEEEE;
-  min-height: 10em;
-  font-family: Consolas, monaco, monospace;
-  padding: 10px;
+  z-index: 5;
 }
 
 .copyright {

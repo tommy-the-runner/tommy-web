@@ -6,7 +6,7 @@ let app = require('./app')
 
 // Ace editor settings
 require('brace/mode/javascript')
-require('brace/theme/monokai')
+require('brace/theme/clouds_midnight')
 
 function clientSideApp(responses) {
     let requests = app(responses)

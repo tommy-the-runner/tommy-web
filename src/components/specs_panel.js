@@ -31,7 +31,7 @@ function SpecsPanel(sources) {
     const initialValue$ = intent(sources)
 
     const params$ = Observable.just({
-        theme: 'ace/theme/monokai',
+        theme: 'ace/theme/clouds_midnight',
         mode: 'ace/mode/javascript',
         readOnly: true
     })

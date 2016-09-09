@@ -4,11 +4,16 @@ import AceEditor from 'cyclejs-ace-editor'
 
 let {Observable} = require('rx')
 
-function intent({DOM}) {
+function intent({DOM, context}) {
     const buttonClicks$ = DOM.select('.submit-button').events('click')
 
+    const initialCodeValue$ = context.map(json => {
+      return json.initialCode || ''
+    })
+
     return {
-        buttonClicks$
+        buttonClicks$,
+        initialCodeValue$
     }
 }
 
@@ -33,19 +38,16 @@ function view(subjectCodeEditor) {
 }
 
 function CodePanel(sources) {
-    const codeTemplate = 'function sum() {\n\n}\n\nmodule.exports = sum'
-
     const {DOM} = sources
-    const initialValue$ = Observable.just(codeTemplate)
 
-    const {buttonClicks$} = intent(sources)
+    const {buttonClicks$, initialCodeValue$} = intent(sources)
 
     const params$ = Observable.just({
       theme: 'ace/theme/monokai',
       mode: 'ace/mode/javascript'
     })
 
-    const subjectCodeEditor = AceEditor({DOM, initialValue$, params$})
+    const subjectCodeEditor = AceEditor({DOM, initialValue$: initialCodeValue$, params$})
     const vtree$ = view(subjectCodeEditor)
 
     return {

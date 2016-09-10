@@ -22,7 +22,7 @@ function view(subjectCodeEditor) {
     return Observable
         .just(
             <div id="code">
-                <header>
+                <header className="clearfix">
                     <div className="container-header">
                         Your code
                     </div>

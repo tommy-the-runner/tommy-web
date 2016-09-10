@@ -13,11 +13,10 @@ function intent({context}) {
 function view(editor) {
     return Observable.just(
         <div id="spec">
-            <header>
+            <header className="clearfix">
                 <div className="container-header">
                     Specs
                 </div>
-                <div className="header-triangle"></div>
             </header>
             <div className="spec-body">
                 {editor.DOM}

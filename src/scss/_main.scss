@@ -1,13 +1,47 @@
 @import "config";
 
+@mixin flexbox {
+  .flexbox & {
+    @content;
+  }
+}
+
+@mixin no-flexbox {
+  .no-flexbox & {
+    @content;
+  }
+}
+
 html {
-  min-height: 100%;
+  height: 100%;
 }
 
 body {
   min-height: 100%;
   font-family: "Open Sans", sans-serif;
-  padding-bottom: 12em;
+
+  @include flexbox {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @include no-flexbox {
+    padding-bottom: 12em;
+  }
+}
+
+.app-container {
+  @include flexbox {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    > div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }
 
 .top {
@@ -38,54 +72,80 @@ body {
 }
 
 #container {
-  position: absolute;
-  bottom: 10em;
-  top: 3em;
   overflow-y: auto;
   box-sizing: border-box;
-  width: 100%;
   background-color: $backgroundBeige;
+
+  @include flexbox {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+  }
+
+  @include no-flexbox {
+    position: absolute;
+    bottom: 10em;
+    top: 3em;
+    width: 100%;
+  }
 }
 
 #code {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 50%;
   min-height: 20em;
-  padding: 0 10px;
+
+  @include flexbox {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @include no-flexbox {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+  }
 }
 
 #code .ace_editor,
 #spec .ace_editor {
-  position: absolute;
-  top: 3em;
-  left: 0;
-  right: 0;
-  bottom: 3em;
-  width: 100%;
   box-sizing: border-box;
   min-height: 17em;
   font-size: 1em;
   border: none;
   padding: 10px 10px 10px 20px;
+
+  @include no-flexbox {
+    position: absolute;
+    top: 3em;
+    left: 0;
+    right: 0;
+    bottom: 3em;
+    width: 100%;
+  }
 }
 
 #code footer {
-  position: absolute;
-  bottom: 0;
-  height: 3em;
-  width: 100%;
   padding: 10px;
+
+  @include no-flexbox {
+    position: absolute;
+    bottom: 0;
+    height: 3em;
+    width: 100%;
+  }
 }
 
 #code header, #spec header {
   color: $blackText;
   text-align: center;
   padding: 10px 0;
-  height: $headerHeight;
   box-sizing: border-box;
+
+  @include no-flexbox {
+    height: $headerHeight;
+  }
 }
 
 #spec header {
@@ -93,27 +153,58 @@ body {
 }
 
 #spec {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 50%;
+  border-left: 5px dashed #e68a00;
   min-height: 20em;
   box-sizing: border-box;
+
+  @include flexbox {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @include no-flexbox {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+  }
 }
 
 .spec-body {
-  font-family: Consolas, monaco, monospace;
-  border-left: 5px dashed #e68a00;
   overflow-y: auto;
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  top: 0;
+
+  @include flexbox {
+    padding-bottom: 52px;
+  }
+
+  @include no-flexbox {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+  }
 }
 
-.spec-body, .code {
-  padding: 10px 10px 10px 10px;
+.code, .spec-body {
+  @include flexbox {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    > div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.ace_editor {
+  @include flexbox {
+    flex: 1;
+  }
 }
 
 .container-header {
@@ -137,11 +228,14 @@ body {
 }
 
 .footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
   box-sizing: border-box;
-  z-index: 5;
+
+  @include no-flexbox {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 5;
+  }
 }
 
 .submit-button {

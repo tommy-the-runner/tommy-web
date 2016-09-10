@@ -39,7 +39,7 @@ body {
 
 #container {
   position: absolute;
-  bottom: 12em;
+  bottom: 10em;
   top: 3em;
   overflow-y: auto;
   box-sizing: border-box;
@@ -142,16 +142,6 @@ body {
   width: 100%;
   box-sizing: border-box;
   z-index: 5;
-}
-
-.copyright {
-  background-color: $primaryDarkPurple;
-  color: $whiteText;
-  height: $headerHeight;
-  padding-right: 5px;
-  text-align: right;
-  box-sizing: border-box;
-  line-height: $headerHeight;
 }
 
 .submit-button {

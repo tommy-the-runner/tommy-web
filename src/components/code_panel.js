@@ -31,7 +31,7 @@ function view(subjectCodeEditor) {
                     { subjectCodeEditor.DOM }
                 </div>
                 <footer>
-                    <button className="submit-button">Submit</button>
+                    <button className="submit-button">Run</button>
                 </footer>
             </div>
         )

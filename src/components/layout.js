@@ -33,21 +33,22 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({canonicalUrl, vtree, con
         <meta property="og:image:width" content="2680" />
         <meta property="og:image:height" content="1395" />
         <meta property="og:description" content="Exercise your testing skills with a coding challenge." />
+        <script src='/assets/js/modernizr.js'></script>
       </head>
       <body>
 
-      <header className="top clearfix">
-        <img className="logo" src="/assets/images/tommy-logo.png" alt="Tommy the Runner"/>
-        <h2 className="title">{context.title}</h2>
-      </header>
+        <header className="top clearfix">
+          <img className="logo" src="/assets/images/tommy-logo.png" alt="Tommy the Runner"/>
+          <h2 className="title">{context.title}</h2>
+        </header>
 
-      <div className="app-container">
-        {vtree}
-      </div>
-      
-      <script>window.appContext = {serialize(context)}</script>
-      <script>window.appConfig = {serialize(config)}</script>
-      <script src={jsBundle}></script>
+        <div className="app-container">
+          {vtree}
+        </div>
+
+        <script>window.appContext = {serialize(context)}</script>
+        <script>window.appConfig = {serialize(config)}</script>
+        <script src={jsBundle}></script>
 
       </body>
       </html>

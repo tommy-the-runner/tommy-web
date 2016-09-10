@@ -96,6 +96,11 @@ function app(sources) {
             .map(apiResponse => {
                 return apiResponse.body
             })
+            .catch(err => {
+              return Observable.just({
+                title: err.message
+              })
+            })
             .shareReplay(1)
         )
 

@@ -10,7 +10,14 @@
     "@cycle/dom": {
       "version": "9.4.0",
       "from": "@cycle/dom@>=9.4.0 <10.0.0",
-      "resolved": "https://registry.npmjs.org/@cycle/dom/-/dom-9.4.0.tgz"
+      "resolved": "https://registry.npmjs.org/@cycle/dom/-/dom-9.4.0.tgz",
+      "dependencies": {
+        "vdom-to-html": {
+          "version": "2.2.0",
+          "from": "vdom-to-html@2.2.0",
+          "resolved": "https://registry.npmjs.org/vdom-to-html/-/vdom-to-html-2.2.0.tgz"
+        }
+      }
     },
     "@cycle/http": {
       "version": "8.2.2",
@@ -21,6 +28,11 @@
       "version": "1.3.2",
       "from": "@cycle/isolate@>=1.3.2 <2.0.0",
       "resolved": "https://registry.npmjs.org/@cycle/isolate/-/isolate-1.3.2.tgz"
+    },
+    "@cycle/rx-adapter": {
+      "version": "3.0.0",
+      "from": "@cycle/rx-adapter@latest",
+      "resolved": "https://registry.npmjs.org/@cycle/rx-adapter/-/rx-adapter-3.0.0.tgz"
     },
     "abbrev": {
       "version": "1.0.7",
@@ -3457,7 +3469,8 @@
           "dependencies": {
             "minimatch": {
               "version": "2.0.10",
-              "from": "minimatch@>=2.0.1 <3.0.0"
+              "from": "minimatch@2.0.10",
+              "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-2.0.10.tgz"
             }
           }
         },
@@ -4966,9 +4979,9 @@
       "resolved": "https://registry.npmjs.org/vdom-parser/-/vdom-parser-1.2.1.tgz"
     },
     "vdom-to-html": {
-      "version": "2.2.0",
-      "from": "vdom-to-html@2.2.0",
-      "resolved": "https://registry.npmjs.org/vdom-to-html/-/vdom-to-html-2.2.0.tgz"
+      "version": "2.3.0",
+      "from": "vdom-to-html@latest",
+      "resolved": "https://registry.npmjs.org/vdom-to-html/-/vdom-to-html-2.3.0.tgz"
     },
     "verror": {
       "version": "1.3.6",

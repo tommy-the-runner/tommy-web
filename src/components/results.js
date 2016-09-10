@@ -30,8 +30,7 @@ function model({testResults$}) {
     .map(reporter => {
       return getTests(reporter.runner.suite)
     })
-
-  .startWith(Observable.empty())
+    .startWith(Observable.empty())
 
   const stats$ = executionReports$
     .map(reporter => reporter.stats)

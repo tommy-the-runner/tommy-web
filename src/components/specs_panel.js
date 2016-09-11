@@ -32,7 +32,8 @@ function SpecsPanel(sources) {
     const params$ = Observable.just({
         theme: 'ace/theme/clouds_midnight',
         mode: 'ace/mode/javascript',
-        readOnly: true
+        readOnly: true,
+        fontSize: 13
     })
     const editor = AceEditor({DOM, initialValue$, params$})
     const vtree$ = view(editor)

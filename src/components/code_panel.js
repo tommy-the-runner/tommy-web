@@ -44,7 +44,8 @@ function CodePanel(sources) {
 
     const params$ = Observable.just({
       theme: 'ace/theme/clouds_midnight',
-      mode: 'ace/mode/javascript'
+      mode: 'ace/mode/javascript',
+      fontSize: 13
     })
 
     const subjectCodeEditor = AceEditor({DOM, initialValue$: initialCodeValue$, params$})

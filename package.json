@@ -48,9 +48,10 @@
     "react-proxy": "^1.1.8",
     "rx": "4.0.6",
     "serialize-javascript": "^1.0.0",
+    "sinon-chai": "^2.8.0",
     "slugify": "^1.0.2",
     "statsd-client": "^0.2.2",
-    "tommy-the-runner": "0.0.3",
+    "tommy-the-runner": "0.0.4",
     "uglifyify": "^3.0.1",
     "vinyl-source-stream": "^1.1.0"
   },

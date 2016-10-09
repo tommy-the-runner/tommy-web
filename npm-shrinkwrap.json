@@ -4309,9 +4309,14 @@
       "resolved": "https://registry.npmjs.org/signal-exit/-/signal-exit-2.1.2.tgz"
     },
     "sinon": {
-      "version": "1.17.4",
+      "version": "1.17.6",
       "from": "sinon@>=1.17.3 <2.0.0",
-      "resolved": "https://registry.npmjs.org/sinon/-/sinon-1.17.4.tgz"
+      "resolved": "https://registry.npmjs.org/sinon/-/sinon-1.17.6.tgz"
+    },
+    "sinon-chai": {
+      "version": "2.8.0",
+      "from": "sinon-chai@latest",
+      "resolved": "https://registry.npmjs.org/sinon-chai/-/sinon-chai-2.8.0.tgz"
     },
     "slash": {
       "version": "1.0.0",
@@ -4718,8 +4723,8 @@
       "resolved": "https://registry.npmjs.org/to-iso-string/-/to-iso-string-0.0.2.tgz"
     },
     "tommy-the-runner": {
-      "version": "0.0.3",
-      "from": "tommy-the-runner@0.0.3",
+      "version": "0.0.4",
+      "from": "tommy-the-runner@0.0.4",
       "dependencies": {
         "commander": {
           "version": "2.3.0",

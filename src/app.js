@@ -7,13 +7,18 @@ import {
 } from '@cycle/dom'
 
 let tommy = require('tommy-the-runner')
+const sinonChai = require('sinon-chai')
 
 import CodePanel from './components/code_panel'
 import SpecsPanel from './components/specs_panel'
 import Results from './components/results'
 
 function executeSpecs(userCode, specsCode) {
-    let promise = tommy.run(userCode, specsCode)
+    let promise = tommy.run(userCode, specsCode, {
+      extraModules: {
+        'sinon-chai': sinonChai
+      }
+    })
 
     return Observable
       .fromPromise(promise)

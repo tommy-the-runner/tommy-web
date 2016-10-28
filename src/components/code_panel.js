@@ -4,6 +4,15 @@ import AceEditor from 'cyclejs-ace-editor'
 
 let {Observable} = require('rx')
 
+const defaultEditorOptions = {
+  theme: 'ace/theme/clouds_midnight',
+  fontSize: 13,
+  sessionOptions: {
+    mode: 'ace/mode/javascript',
+    tabSize: 2
+  }
+}
+
 function intent({DOM, context}) {
     const buttonClicks$ = DOM.select('.submit-button').events('click')
 
@@ -11,10 +20,19 @@ function intent({DOM, context}) {
       return json.initialCode || ''
     })
 
-    return {
-        buttonClicks$,
-        initialCodeValue$
+  const initialCodeEditable$ = context.map(json => {
+    if (json.initialCodeEditable === false) {
+      return false
     }
+
+    return true
+  })
+
+  return {
+    buttonClicks$,
+    initialCodeValue$,
+    initialCodeEditable$
+  }
 }
 
 function view(subjectCodeEditor) {
@@ -40,15 +58,12 @@ function view(subjectCodeEditor) {
 function CodePanel(sources) {
     const {DOM} = sources
 
-    const {buttonClicks$, initialCodeValue$} = intent(sources)
+    const {buttonClicks$, initialCodeValue$, initialCodeEditable$} = intent(sources)
 
-    const params$ = Observable.just({
-      theme: 'ace/theme/clouds_midnight',
-      fontSize: 13,
-      sessionOptions: {
-        mode: 'ace/mode/javascript',
-        tabSize: 2
-      }
+    const params$ = initialCodeEditable$.map(isEditable => {
+      return Object.assign({}, defaultEditorOptions, {
+        readOnly: !isEditable
+      })
     })
 
     const subjectCodeEditor = AceEditor({DOM, initialValue$: initialCodeValue$, params$})

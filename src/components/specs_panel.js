@@ -3,11 +3,33 @@ import isolate from '@cycle/isolate'
 import AceEditor from 'cyclejs-ace-editor'
 import {Observable, Subject} from 'rx'
 
+const defaultEditorOptions = {
+    theme: 'ace/theme/clouds_midnight',
+    readOnly: true,
+    fontSize: 13,
+    sessionOptions: {
+        mode: 'ace/mode/javascript',
+        tabSize: 2
+    }
+}
+
 function intent({context}) {
-    return context.map(json => {
+    const specCodeValue$ = context.map(json => {
         const specsCodeRaw = json.specsCode || ''
         return specsCodeRaw.replace('require(\'subject\')', '/* your code here */')
     })
+
+    const specCodeEditable$ = context.map(json => {
+        if (json.specsCodeEditable === false) {
+            return false
+        }
+        return true
+    })
+
+    return {
+        specCodeValue$,
+        specCodeEditable$
+    }
 }
 
 function view(editor) {
@@ -27,18 +49,14 @@ function view(editor) {
 
 function SpecsPanel(sources) {
     const {DOM} = sources
-    const initialValue$ = intent(sources)
+    const {specCodeValue$, specCodeEditable$} = intent(sources)
 
-    const params$ = Observable.just({
-        theme: 'ace/theme/clouds_midnight',
-        readOnly: true,
-        fontSize: 13,
-        sessionOptions: {
-            mode: 'ace/mode/javascript',
-            tabSize: 2
-        }
+    const params$ = specCodeEditable$.map(isEditable => {
+        return Object.assign({}, defaultEditorOptions, {
+            readOnly: !isEditable
+        })
     })
-    const editor = AceEditor({DOM, initialValue$, params$})
+    const editor = AceEditor({DOM, initialValue$: specCodeValue$, params$})
     const vtree$ = view(editor)
 
     const code$ = editor.value$.map(sources => {

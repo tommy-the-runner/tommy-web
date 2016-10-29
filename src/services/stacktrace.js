@@ -10,7 +10,7 @@ function parse(stack) {
     match = regexp.exec(stack)
   }
 
-  return matches.map(match => {
+  return matches.slice(0, -1).map(match => {
     return `at ${match[1]} (eval at <anonymous>:${match[3] - 2}:${match[4]})`
   })
 }

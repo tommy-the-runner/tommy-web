@@ -14,15 +14,11 @@ describe('stacktracke service', function () {
       })
 
       it('should parse short stack until it comes from user code', function () {
-        expect(this.results).to.have.lengthOf(2)
+        expect(this.results).to.have.lengthOf(1)
       })
 
       it('should show "sum" call with altered line number', function () {
         expect(this.results[0]).to.have.contain('at sum (eval at <anonymous>:4:2)')
-      })
-
-      it('should show "eval" call with altered line number', function () {
-        expect(this.results[1]).to.have.contain('at Context.eval (eval at <anonymous>:16:12)')
       })
     })
 
@@ -34,7 +30,7 @@ describe('stacktracke service', function () {
       it('should parse long stack until it comes from user code', function () {
         const results = parse(VALID_STACK_LONG)
 
-        expect(results).to.have.lengthOf(3)
+        expect(results).to.have.lengthOf(2)
       })
 
       it('should show "a" call with altered line number', function () {
@@ -43,10 +39,6 @@ describe('stacktracke service', function () {
 
       it('should show "show" call with altered line number', function () {
         expect(this.results[1]).to.have.contain('at sum (eval at <anonymous>:4:2)')
-      })
-
-      it('should show "eval" call with altered line number', function () {
-        expect(this.results[2]).to.have.contain('at Context.eval (eval at <anonymous>:16:12)')
       })
     })
   })

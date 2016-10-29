@@ -3,20 +3,6 @@ import {p, hJSX} from '@cycle/dom'
 import isolate from '@cycle/isolate'
 import {parse} from '../services/stacktrace'
 
-function intent({testResults}) {
-  return testResults
-}
-
-function getTests(suite) {
-  const tests = Observable.from(suite.tests)
-  const subsuites = suite.suites
-    .map(s => getTests(s))
-
-  const childrenTests = Observable.from(subsuites).concatAll()
-
-  return tests.concat(childrenTests)
-}
-
 function model({testResults$}) {
   const executionErrors$ = testResults$
     .filter(res => res.type == 'error')
@@ -28,7 +14,7 @@ function model({testResults$}) {
 
   const testReport$ = executionReports$
     .map(reporter => {
-      return getTests(reporter.runner.suite)
+      return Observable.just(reporter.runner.suite)
     })
     .startWith(Observable.empty())
 
@@ -44,23 +30,50 @@ function model({testResults$}) {
   }
 }
 
+function viewTests(tests) {
+  return tests.map(test => {
+    let lines = [
+      <div className={`status-${test.state}`}>{test.title}</div>
+    ]
+
+    if (test.state == 'failed') {
+      const stacktrace = parse(test.err.stack)
+      const stack = stacktrace.map(line => <div>{line}</div>)
+
+      lines = lines.concat(
+        <div className={`status-${test.state} is-error_message log_node`}>
+          {test.err.name}: {test.err.message}
+
+          <div className="status-stack_trace">
+            {stack}
+          </div>
+        </div>)
+    }
+
+    return lines
+  })
+}
+
+function viewSuite(suite) {
+  const children = suite.suites.map(s => viewSuite(s))
+
+  const tests = viewTests(suite.tests)
+
+  return <div className="log_node">
+    {suite.root ? 'Title of the suite' : suite.title}
+
+    <div className="log_node">
+      {tests} {children}
+    </div>
+  </div>
+}
+
 function viewSpecs(tests$) {
   return tests$
-    .concatMap(test => {
-      let lines = []
-
-      lines = lines.concat(<p className={`status-${test.state}`}>{test.title}</p>)
-
-      if (test.state == 'failed') {
-        const stacktrace = parse(test.err.stack)
-        lines = lines.concat(<pre className={`status-${test.state}`}>    {test.err.message}</pre>)
-        lines = lines.concat(stacktrace.map(line => <pre className={`status-${test.state}`}>    {line}</pre>))
-      }
-
-      return Observable.from(lines)
+    .map(suite => {
+      return suite.suites.map(s => viewSuite(s))
     })
-    .toArray()
-    .map(results => <div>{results}</div>)
+    .map(results => <div>Test of the suite {results}</div>)
 }
 
 function viewSummary(stats$) {
@@ -100,7 +113,7 @@ function view({testReport$, executionErrors$, stats$}) {
 }
 
 function Results(sources) {
-  const testResults$ = intent(sources)
+  const {testResults$} = sources
   const {testReport$, executionErrors$, stats$} = model({testResults$})
   const vtree$ = view({testReport$, executionErrors$, stats$})
 

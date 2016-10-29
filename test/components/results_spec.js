@@ -28,25 +28,31 @@ const RED_STATS = {
 }
 
 const GREEN_SUITE = {
-  tests: [{
-    title: 'Siema',
-    state: 'passed'
-  }],
-  suites: []
+  suites: [{
+    title: 'Green Suite',
+    suites: [],
+    tests: [{
+      title: 'Siema',
+      state: 'passed'
+    }]
+  }]
 }
 
 const RED_SUITE = {
-  tests: [{
-    title: 'Siema',
-    state: 'failed',
-    err: {
-      stack: {}
-    }
-  }],
-  suites: []
+  suites: [{
+    title: 'Red Suite',
+    suites: [],
+    tests: [{
+      title: 'Siema',
+      state: 'failed',
+      err: {
+        stack: {}
+      }
+    }]
+  }]
 }
 
-describe('Specs Panel', function () {
+describe('Results', function () {
   beforeEach(function () {
     this.scheduler = new TestScheduler();
 
@@ -59,7 +65,7 @@ describe('Specs Panel', function () {
   })
 
   it('should render empty on the beginning', function () {
-    var testResults = this.scheduler.createHotObservable(
+    var testResults$ = this.scheduler.createHotObservable(
       onNext(250, {
         type: 'report',
         reporter: {
@@ -71,11 +77,11 @@ describe('Specs Panel', function () {
       })
     );
 
-    const res = this.render(Results, { DOM, testResults }, 'DOM')
+    const res = this.render(Results, { DOM, testResults$ }, 'DOM')
     const message = res.messages[0].value
     const html = vdomToHtml(message.value)
 
-    expect(html).to.contain('<div><div></div></div>')
+    expect(html).to.contain('<div class="terminal"><div></div></div>')
   })
 
   context('when suite is green', function () {
@@ -89,33 +95,33 @@ describe('Specs Panel', function () {
     })
 
     it('should render test suite status', function () {
-      var testResults = this.scheduler.createHotObservable(
+      var testResults$ = this.scheduler.createHotObservable(
         onNext(250, {
           type: 'report',
           reporter: this.reporter
         })
       );
 
-      const res = this.render(Results, { DOM, testResults }, 'DOM')
+      const res = this.render(Results, { DOM, testResults$ }, 'DOM')
       const message = res.messages[1].value
       const html = vdomToHtml(message.value)
 
-      expect(html).to.contain('<p class="status-passed">Siema</p>')
+      expect(html).to.contain('<div class="status-passed">Siema</div>')
     })
 
     it('should render test suite summary', function () {
-      var testResults = this.scheduler.createHotObservable(
+      var testResults$ = this.scheduler.createHotObservable(
         onNext(250, {
           type: 'report',
           reporter: this.reporter
         })
       );
 
-      const res = this.render(Results, { DOM, testResults }, 'DOM')
+      const res = this.render(Results, { DOM, testResults$ }, 'DOM')
       const message = res.messages[1].value
       const html = vdomToHtml(message.value)
 
-      expect(html).to.contain('<p class="summary status-passed">1 test(s) run. 1 passed, 0 failed, 0 pending</p><')
+      expect(html).to.contain('<p class="summary status-passed">1 test(s) run. 1 passed, 0 failed, 0 pending</p>')
     })
   })
 
@@ -130,33 +136,33 @@ describe('Specs Panel', function () {
     })
 
     it('should render test suite status', function () {
-      var testResults = this.scheduler.createHotObservable(
+      var testResults$ = this.scheduler.createHotObservable(
         onNext(250, {
           type: 'report',
           reporter: this.reporter
         })
       );
 
-      const res = this.render(Results, { DOM, testResults }, 'DOM')
+      const res = this.render(Results, { DOM, testResults$ }, 'DOM')
       const message = res.messages[1].value
       const html = vdomToHtml(message.value)
 
-      expect(html).to.contain('<p class="status-failed">Siema</p>')
+      expect(html).to.contain('<div class="status-failed">Siema</div>')
     })
 
     it('should render test suite summary', function () {
-      var testResults = this.scheduler.createHotObservable(
+      var testResults$ = this.scheduler.createHotObservable(
         onNext(250, {
           type: 'report',
           reporter: this.reporter
         })
       );
 
-      const res = this.render(Results, { DOM, testResults }, 'DOM')
+      const res = this.render(Results, { DOM, testResults$ }, 'DOM')
       const message = res.messages[1].value
       const html = vdomToHtml(message.value)
 
-      expect(html).to.contain('<p class="summary status-failed">1 test(s) run. 0 passed, 1 failed, 0 pending</p><')
+      expect(html).to.contain('<p class="summary status-failed">1 test(s) run. 0 passed, 1 failed, 0 pending</p>')
     })
   })
 })

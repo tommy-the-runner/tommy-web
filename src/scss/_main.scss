@@ -272,6 +272,11 @@ body {
   box-sizing: border-box;
 }
 
+.log_node {
+  margin-top: 4px;
+  padding-left: 20px;
+}
+
 .status-passed {
   color: #7CFC00;
 }
@@ -286,6 +291,21 @@ body {
 
 .status-error {
   color: #FF4500;
+}
+
+.status-stack_trace {
+  color: #777;
+  padding-left: 20px;
+}
+
+.status-error.is-stack_trace,
+.status-failed.is-stack_trace {
+  padding-left: 40px;
+}
+
+.status-error.is-error_message,
+.status-failed.is-error_message {
+  margin: 12px 0;
 }
 
 .summary {

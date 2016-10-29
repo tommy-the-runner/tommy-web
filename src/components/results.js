@@ -3,6 +3,18 @@ import {p, hJSX} from '@cycle/dom'
 import isolate from '@cycle/isolate'
 import {parse} from '../services/stacktrace'
 
+function intent(sources) {
+  const {context, testResults$} = sources
+
+  const exerciseTitle$ = context.map(json => {
+    return json.title || 'Exercise'
+  })
+
+  return {
+    testResults$,
+    exerciseTitle$
+  }
+}
 function model({testResults$}) {
   const executionErrors$ = testResults$
     .filter(res => res.type == 'error')
@@ -54,13 +66,13 @@ function viewTests(tests) {
   })
 }
 
-function viewSuite(suite) {
+function viewSuite(suite, originalTitle) {
   const children = suite.suites.map(s => viewSuite(s))
 
   const tests = viewTests(suite.tests)
 
   return <div className="log_node">
-    {suite.root ? 'Title of the suite' : suite.title}
+    {suite.root ? originalTitle : suite.title}
 
     <div className="log_node">
       {tests} {children}
@@ -68,12 +80,14 @@ function viewSuite(suite) {
   </div>
 }
 
-function viewSpecs(tests$) {
-  return tests$
-    .map(suite => {
-      return suite.suites.map(s => viewSuite(s))
+function viewSpecs(sources) {
+  const {tests$, exerciseTitle$} = sources
+
+  return Observable
+    .zip(tests$, exerciseTitle$, (suite, title) => {
+      const results = suite.suites.map(s => viewSuite(s))
+      return <div>{title} {results}</div>
     })
-    .map(results => <div>Test of the suite {results}</div>)
 }
 
 function viewSummary(stats$) {
@@ -90,10 +104,10 @@ function viewSummary(stats$) {
   })
 }
 
-function view({testReport$, executionErrors$, stats$}) {
+function view({exerciseTitle$, testReport$, executionErrors$, stats$}) {
   const specResultsVtree$ = Observable
     .zip(testReport$, stats$, (tests$, stats) => {
-      const specs$ = viewSpecs(tests$)
+      const specs$ = viewSpecs({tests$, exerciseTitle$})
       const summary$ = viewSummary(Observable.just(stats))
 
       return Observable.from([specs$, summary$]).concatAll().toArray().map(els => <div>{els}</div>)
@@ -113,9 +127,9 @@ function view({testReport$, executionErrors$, stats$}) {
 }
 
 function Results(sources) {
-  const {testResults$} = sources
+  const {testResults$, exerciseTitle$} = intent(sources)
   const {testReport$, executionErrors$, stats$} = model({testResults$})
-  const vtree$ = view({testReport$, executionErrors$, stats$})
+  const vtree$ = view({exerciseTitle$, testReport$, executionErrors$, stats$})
 
   sources.DOM.select('.terminal').observable
     .filter(els => els.length)

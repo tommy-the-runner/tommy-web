@@ -280,6 +280,10 @@ body {
   padding-left: 20px;
 }
 
+.log_root_node > .log_node {
+  padding-left: 0;
+}
+
 .status-passed {
   color: #7CFC00;
 }

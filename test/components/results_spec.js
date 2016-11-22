@@ -97,7 +97,7 @@ describe('Results', function () {
     const message = res.messages[0].value
     const html = vdomToHtml(message.value)
 
-    expect(html).to.contain('<div class="terminal"><div></div></div>')
+    expect(html).to.contain('<div class="terminal"><div class="log_root_node"></div></div>')
   })
 
   context('when suite is green', function () {

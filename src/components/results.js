@@ -1,18 +1,13 @@
-import {Observable, Subject} from 'rx'
+import {Observable} from 'rx'
 import {p, hJSX} from '@cycle/dom'
 import isolate from '@cycle/isolate'
 import {parse} from '../services/stacktrace'
 
 function intent(sources) {
-  const {context, testResults$} = sources
-
-  const exerciseTitle$ = context.map(json => {
-    return json.title || 'Exercise'
-  })
+  const {testResults$} = sources
 
   return {
-    testResults$,
-    exerciseTitle$
+    testResults$
   }
 }
 function model({testResults$}) {
@@ -66,27 +61,27 @@ function viewTests(tests) {
   })
 }
 
-function viewSuite(suite, originalTitle) {
+function viewSuite(suite) {
   const children = suite.suites.map(s => viewSuite(s))
 
   const tests = viewTests(suite.tests)
 
-  return <div className="log_node">
-    {suite.root ? originalTitle : suite.title}
+  return <div className='log_node'>
+    {suite.title}
 
-    <div className="log_node">
+    <div className='log_node'>
       {tests} {children}
     </div>
   </div>
 }
 
 function viewSpecs(sources) {
-  const {tests$, exerciseTitle$} = sources
+  const {tests$} = sources
 
   return Observable
-    .zip(tests$, exerciseTitle$, (suite, title) => {
+    .zip(tests$, (suite) => {
       const results = suite.suites.map(s => viewSuite(s))
-      return <div>{title} {results}</div>
+      return results
     })
 }
 
@@ -104,13 +99,13 @@ function viewSummary(stats$) {
   })
 }
 
-function view({exerciseTitle$, testReport$, executionErrors$, stats$}) {
+function view({testReport$, executionErrors$, stats$}) {
   const specResultsVtree$ = Observable
     .zip(testReport$, stats$, (tests$, stats) => {
-      const specs$ = viewSpecs({tests$, exerciseTitle$})
+      const specs$ = viewSpecs({tests$})
       const summary$ = viewSummary(Observable.just(stats))
 
-      return Observable.from([specs$, summary$]).concatAll().toArray().map(els => <div>{els}</div>)
+      return Observable.from([specs$, summary$]).concatAll().toArray().map(els => <div className="log_root_node">{els}</div>)
     })
     .concatAll()
 
@@ -127,9 +122,9 @@ function view({exerciseTitle$, testReport$, executionErrors$, stats$}) {
 }
 
 function Results(sources) {
-  const {testResults$, exerciseTitle$} = intent(sources)
+  const {testResults$} = intent(sources)
   const {testReport$, executionErrors$, stats$} = model({testResults$})
-  const vtree$ = view({exerciseTitle$, testReport$, executionErrors$, stats$})
+  const vtree$ = view({testReport$, executionErrors$, stats$})
 
   sources.DOM.select('.terminal').observable
     .filter(els => els.length)

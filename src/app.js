@@ -120,7 +120,7 @@ function app(sources) {
         subjectCode$: codePanel.code$
     })
 
-    const results$ = Results({DOM, testResults$, context: context$})
+    const results$ = Results({DOM, testResults$})
     const vtree$ = renderPageContent(codePanel.DOM, specsPanel.DOM, results$.DOM)
 
     const request$ = Observable.combineLatest(actions, config, (action, cfg) => {

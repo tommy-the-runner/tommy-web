@@ -87,7 +87,7 @@ function viewSuite(suite) {
 
   const tests = viewTests(suite.tests)
 
-  return <div className='log_node'>
+  return <div>
     {suite.title}
 
     <div className='log_node'>

@@ -161,8 +161,8 @@ describe('Results', function () {
       const message = res.messages[1].value
       const html = vdomToHtml(message.value)
 
-      expect(html).to.contain('<div class="log_node">Hi')
-      expect(html).to.contain('<div class="log_node"><div class="status-passed">Root level test')
+      expect(html).to.contain('<div>Hi')
+      expect(html).to.contain('<div class="status-passed">Root level test')
     })
   })
 

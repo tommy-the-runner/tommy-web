@@ -37,10 +37,18 @@ function model({testResults$}) {
   }
 }
 
+function getTestStatusClass(test) {
+  if (test.pending) {
+    return 'status-pending'
+  }
+
+  return `status-${test.state}`
+}
+
 function viewTests(tests) {
   return tests.map(test => {
     let lines = [
-      <div className={`status-${test.state}`}>{test.title}</div>
+      <div className={getTestStatusClass(test)}>{test.title}</div>
     ]
 
     if (test.state === 'failed') {

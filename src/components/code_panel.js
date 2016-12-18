@@ -14,11 +14,11 @@ const defaultEditorOptions = {
 }
 
 function intent({DOM, context}) {
-    const buttonClicks$ = DOM.select('.submit-button').events('click')
+  const buttonClicks$ = DOM.select('.submit-button').events('click')
 
-    const initialCodeValue$ = context.map(json => {
-      return json.initialCode || ''
-    })
+  const initialCodeValue$ = context.map(json => {
+    return json.initialCode || ''
+  })
 
   const initialCodeEditable$ = context.map(json => {
     if (json.initialCodeEditable === false) {
@@ -36,48 +36,47 @@ function intent({DOM, context}) {
 }
 
 function view(subjectCodeEditor) {
-
-    return Observable
-        .just(
-            <div id="code">
-                <header className="clearfix">
-                    <div className="container-header">
-                        Your code
-                    </div>
-                </header>
-                <div className="code">
-                    { subjectCodeEditor.DOM }
-                </div>
-                <footer>
-                    <button className="submit-button">Run</button>
-                </footer>
-            </div>
-        )
+  return Observable
+    .just(
+      <div id="code">
+        <header className="clearfix">
+          <div className="container-header">
+            Your code
+          </div>
+        </header>
+        <div className="code">
+          { subjectCodeEditor.DOM }
+        </div>
+        <footer>
+          <button className="submit-button">Run</button>
+        </footer>
+      </div>
+    )
 }
 
 function CodePanel(sources) {
-    const {DOM} = sources
+  const {DOM} = sources
 
-    const {buttonClicks$, initialCodeValue$, initialCodeEditable$} = intent(sources)
+  const {buttonClicks$, initialCodeValue$, initialCodeEditable$} = intent(sources)
 
-    const params$ = initialCodeEditable$.map(isEditable => {
-      return Object.assign({}, defaultEditorOptions, {
-        readOnly: !isEditable
-      })
+  const params$ = initialCodeEditable$.map(isEditable => {
+    return Object.assign({}, defaultEditorOptions, {
+      readOnly: !isEditable
     })
+  })
 
-    const subjectCodeEditor = AceEditor({DOM, initialValue$: initialCodeValue$, params$})
-    const vtree$ = view(subjectCodeEditor)
+  const subjectCodeEditor = AceEditor({DOM, initialValue$: initialCodeValue$, params$})
+  const vtree$ = view(subjectCodeEditor)
 
-    return {
-        DOM: vtree$,
-        buttonClicks$: buttonClicks$,
-        code$: subjectCodeEditor.value$
-    }
+  return {
+    DOM: vtree$,
+    buttonClicks$: buttonClicks$,
+    code$: subjectCodeEditor.value$
+  }
 }
 
 function CodePanelWrapper(sources) {
-    return isolate(CodePanel)(sources)
+  return isolate(CodePanel)(sources)
 }
 
 export default CodePanelWrapper

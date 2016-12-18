@@ -5,13 +5,13 @@ function parse(stack) {
 
   let matches = []
 
-  while (match != null) {
+  while (match !== null) {
     matches.push(match)
     match = regexp.exec(stack)
   }
 
-  return matches.slice(0, -1).map(match => {
-    return `at ${match[1]} (eval at <anonymous>:${match[3] - 2}:${match[4]})`
+  return matches.slice(0, -1).map(line => {
+    return `at ${line[1]} (eval at <anonymous>:${line[3] - 2}:${line[4]})`
   })
 }
 

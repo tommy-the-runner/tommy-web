@@ -12,11 +12,11 @@ function intent(sources) {
 }
 function model({testResults$}) {
   const executionErrors$ = testResults$
-    .filter(res => res.type == 'error')
+    .filter(res => res.type === 'error')
     .map(res => res.err)
 
   const executionReports$ = testResults$
-    .filter(res => res.type == 'report')
+    .filter(res => res.type === 'report')
     .map(res => res.reporter)
 
   const testReport$ = executionReports$
@@ -43,7 +43,7 @@ function viewTests(tests) {
       <div className={`status-${test.state}`}>{test.title}</div>
     ]
 
-    if (test.state == 'failed') {
+    if (test.state === 'failed') {
       const stacktrace = parse(test.err.stack)
       const stack = stacktrace.map(line => <div>{line}</div>)
 
@@ -103,7 +103,7 @@ function viewSummary(stats$) {
       return ''
     }
 
-    const statusClassName = (stats.failures > 0) ? 'status-failed' : 'status-passed'
+    const statusClassName = stats.failures > 0 ? 'status-failed' : 'status-passed'
 
     return <p className={`summary ${statusClassName}`}>
       {`${stats.tests} test(s) run. ${stats.passes} passed, ${stats.failures} failed, ${stats.pending} pending`}

@@ -3,6 +3,10 @@ box: node:6.0
 build:
   steps:
     - npm-install
+    - script:
+        name: ESLint
+        code: |
+          npm run lint
     - npm-test
 
     - script:

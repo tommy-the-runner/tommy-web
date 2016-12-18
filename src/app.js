@@ -54,19 +54,20 @@ function model({ctrlSaves$, buttonClicks$, specCode$, subjectCode$}) {
   const sourceCodes$ = new ReplaySubject(1)
 
   const programs$ = Observable
-        .combineLatest(subjectCode$, specCode$, (userCode, specsCode) => {
-          return {userCode, specsCode}
-        })
-        .multicast(sourceCodes$)
+    .combineLatest(subjectCode$, specCode$, (userCode, specsCode) => {
+      return {userCode, specsCode}
+    })
+    .multicast(sourceCodes$)
 
   programs$.connect()
 
   const testResults$ = Observable.merge(ctrlSaves$, buttonClicks$)
-        .debounce(20)
-        .flatMap(() => sourceCodes$.take(1))
-        .flatMap(({userCode, specsCode}) => {
-          return executeSpecs(userCode, specsCode)
-        })
+    .debounce(20)
+    .flatMap(() => sourceCodes$.take(1))
+    .flatMap(({userCode, specsCode}) => {
+      return executeSpecs(userCode, specsCode)
+    })
+    .share()
 
   return {
     testResults$

@@ -4928,9 +4928,9 @@
       "resolved": "https://registry.npmjs.org/to-iso-string/-/to-iso-string-0.0.2.tgz"
     },
     "tommy-the-runner": {
-      "version": "0.0.5",
-      "from": "tommy-the-runner@0.0.5",
-      "resolved": "https://registry.npmjs.org/tommy-the-runner/-/tommy-the-runner-0.0.5.tgz",
+      "version": "0.0.6",
+      "from": "tommy-the-runner@0.0.6",
+      "resolved": "https://registry.npmjs.org/tommy-the-runner/-/tommy-the-runner-0.0.6.tgz",
       "dependencies": {
         "commander": {
           "version": "2.3.0",

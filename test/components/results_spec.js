@@ -39,6 +39,10 @@ const GREEN_SUITE = {
 }
 
 const COMPLEX_GREEN_SUITE = {
+  tests: [{
+    title: 'Root level test',
+    state: 'passed'
+  }],
   suites: [{
     title: 'Green Suite',
     tests: [],
@@ -158,6 +162,7 @@ describe('Results', function () {
       const html = vdomToHtml(message.value)
 
       expect(html).to.contain('<div class="log_node">Hi')
+      expect(html).to.contain('<div class="log_node"><div class="status-passed">Root level test')
     })
   })
 

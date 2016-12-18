@@ -61,6 +61,19 @@ function viewTests(tests) {
   })
 }
 
+function viewRootSuite(suite) {
+  const testsDOM = viewTests(suite.tests || [])
+  const suitesDOM = suite.suites.map(s => viewSuite(s))
+
+  const results = []
+
+  if (testsDOM && testsDOM.length) {
+    results.push(<div className='log_node'>{testsDOM}</div>)
+  }
+
+  return results.concat(suitesDOM)
+}
+
 function viewSuite(suite) {
   const children = suite.suites.map(s => viewSuite(s))
 
@@ -80,8 +93,7 @@ function viewSpecs(sources) {
 
   return Observable
     .zip(tests$, (suite) => {
-      const results = suite.suites.map(s => viewSuite(s))
-      return results
+      return viewRootSuite(suite)
     })
 }
 

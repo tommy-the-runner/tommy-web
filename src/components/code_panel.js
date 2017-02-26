@@ -13,8 +13,7 @@ const defaultEditorOptions = {
   }
 }
 
-function intent({DOM, context}) {
-  const buttonClicks$ = DOM.select('.submit-button').events('click')
+function intent({context}) {
 
   const initialCodeValue$ = context.map(json => {
     return json.initialCode || ''
@@ -29,7 +28,6 @@ function intent({DOM, context}) {
   })
 
   return {
-    buttonClicks$,
     initialCodeValue$,
     initialCodeEditable$
   }
@@ -47,9 +45,6 @@ function view(subjectCodeEditor) {
         <div className="code">
           { subjectCodeEditor.DOM }
         </div>
-        <footer>
-          <button className="submit-button">Run</button>
-        </footer>
       </div>
     )
 }
@@ -57,7 +52,7 @@ function view(subjectCodeEditor) {
 function CodePanel(sources) {
   const {DOM} = sources
 
-  const {buttonClicks$, initialCodeValue$, initialCodeEditable$} = intent(sources)
+  const {initialCodeValue$, initialCodeEditable$} = intent(sources)
 
   const params$ = initialCodeEditable$.map(isEditable => {
     return Object.assign({}, defaultEditorOptions, {
@@ -70,7 +65,6 @@ function CodePanel(sources) {
 
   return {
     DOM: vtree$,
-    buttonClicks$: buttonClicks$,
     code$: subjectCodeEditor.value$
   }
 }

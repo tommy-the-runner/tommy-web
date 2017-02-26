@@ -74,9 +74,16 @@ function model({ctrlSaves$, buttonClicks$, specCode$, subjectCode$}) {
   }
 }
 
-function renderPageContent(codePanel$, specsPanel$, $results) {
-  return Observable.combineLatest(codePanel$, specsPanel$, $results, (codePanel, specsPanel, results) => {
+function renderPageContent(context$, codePanel$, specsPanel$, $results) {
+  return Observable.combineLatest(context$, codePanel$, specsPanel$, $results, (context, codePanel, specsPanel, results) => {
     return <div>
+      <header className="top clearfix">
+        <img className="logo" src="/assets/images/tommy-logo.png" alt="Tommy the Runner"/>
+        <h2 className="title">{context.title}</h2>
+
+        <button className="submit-button">Run</button>
+      </header>
+
       <div id="container" className="clearfix">
         { codePanel }
         { specsPanel }
@@ -91,6 +98,8 @@ function renderPageContent(codePanel$, specsPanel$, $results) {
 
 function app(sources) {
   const {actions, context, config, DOM, HTTP} = sources
+
+  const buttonClicks$ = DOM.select('.submit-button').events('click')
 
   const context$ = context
     .concat(HTTP
@@ -112,13 +121,13 @@ function app(sources) {
   const {ctrlSaves$} = intent({DOM})
   const {testResults$} = model({
     ctrlSaves$,
-    buttonClicks$: codePanel.buttonClicks$,
+    buttonClicks$: buttonClicks$,
     specCode$: specsPanel.code$,
     subjectCode$: codePanel.code$
   })
 
   const results$ = Results({DOM, testResults$})
-  const vtree$ = renderPageContent(codePanel.DOM, specsPanel.DOM, results$.DOM)
+  const vtree$ = renderPageContent(context$, codePanel.DOM, specsPanel.DOM, results$.DOM)
 
   const request$ = Observable.combineLatest(actions, config, (action, cfg) => {
     const exerciseSlug = action.data.exerciseSlug

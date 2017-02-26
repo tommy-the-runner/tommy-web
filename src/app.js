@@ -136,10 +136,29 @@ function app(sources) {
     return {url: `${apiUrl}?slug=${exerciseSlug}`}
   })
 
+  const analytics$ = testResults$.map(results => {
+    const type = results.type
+
+    if (type !== 'report') {
+      return null
+    }
+
+    const reporter = results.reporter
+    const stats = reporter.stats
+
+    return {
+      hitType: 'event',
+      eventCategory: 'Exercises',
+      eventAction: 'run',
+      eventValue: stats.failures + stats.pending
+    }
+  })
+
   return {
     DOM: vtree$,
     HTTP: request$,
-    context: context$
+    context: context$,
+    analytics: analytics$
   }
 }
 

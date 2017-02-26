@@ -42,8 +42,8 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({canonicalUrl, vtree, con
 
         <script>window.appContext = {serialize(context)}</script>
         <script>window.appConfig = {serialize(config)}</script>
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
         <script src={jsBundle}></script>
-
       </body>
       </html>
     )

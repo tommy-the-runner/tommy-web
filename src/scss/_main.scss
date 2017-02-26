@@ -17,6 +17,7 @@ html {
 }
 
 body {
+  background-color: $backgroundBeige;
   height: 100%;
   font-family: "Open Sans", sans-serif;
 
@@ -75,7 +76,6 @@ body {
 #container {
   overflow-y: auto;
   box-sizing: border-box;
-  background-color: $backgroundBeige;
 
   @include flexbox {
     display: flex;

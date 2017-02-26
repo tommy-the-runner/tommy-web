@@ -92,6 +92,7 @@ server.get('/:exerciseSlug', (req, res) => {
   let {sources} = Cycle.run(wrappedAppFn, {
     DOM: makeHTMLDriver(),
     HTTP: makeHTTPDriver(),
+    analytics: () => Observable.empty(),
     actions: () => actions$,
     context: () => Observable.empty(),
     config: () => config$

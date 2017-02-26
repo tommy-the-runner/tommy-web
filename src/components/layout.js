@@ -36,12 +36,6 @@ module.exports = function wrapVTreeWithHTMLBoilerplate({canonicalUrl, vtree, con
         <script src='/assets/js/modernizr.js'></script>
       </head>
       <body>
-
-        <header className="top clearfix">
-          <img className="logo" src="/assets/images/tommy-logo.png" alt="Tommy the Runner"/>
-          <h2 className="title">{context.title}</h2>
-        </header>
-
         <div className="app-container">
           {vtree}
         </div>

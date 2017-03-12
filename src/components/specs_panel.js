@@ -16,7 +16,7 @@ const defaultEditorOptions = {
 function intent({context}) {
   const specCodeValue$ = context.map(json => {
     const specsCodeRaw = json.specsCode || ''
-    return specsCodeRaw.replace('require(\'subject\')', '/* your code here */')
+    return specsCodeRaw.replace('require(\'subject\')', '/* the code from the left panel */')
   })
 
   const specCodeEditable$ = context.map(json => {

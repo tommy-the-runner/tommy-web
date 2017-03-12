@@ -60,7 +60,7 @@ function SpecsPanel(sources) {
   const vtree$ = view(editor)
 
   const code$ = editor.value$.map(code => {
-    return code.replace('/* your code here */', 'require(\'subject\')')
+    return code.replace('/* the code from the left panel */', 'require(\'subject\')')
   })
 
   return {

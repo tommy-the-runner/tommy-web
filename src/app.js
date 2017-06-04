@@ -81,13 +81,15 @@ function renderPageContent(context$, codePanel$, specsPanel$, $results) {
       <header className="top clearfix">
         <img className="logo" src="/assets/images/tommy-logo.png" alt="Tommy the Runner"/>
         <h2 className="title">{context.title}</h2>
-
-        <button className="submit-button">Run</button>
       </header>
 
       <div id="container" className="clearfix">
         { codePanel }
         { specsPanel }
+      </div>
+
+      <div className="submit-button-wrapper">
+        <button className="submit-button">Run</button>
       </div>
 
       <div className="footer clearfix">

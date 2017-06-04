@@ -14,12 +14,7 @@ const defaultEditorOptions = {
 }
 
 function intent({context}) {
-  const specCodeValue$ = context.map(json => {
-    const specsCodeRaw = json.specsCode || ''
-    return specsCodeRaw
-      .replace('require(\'subject\')', '/* the code from the left panel */')
-      .replace('require(\'the code from the left panel\')', '/* the code from the left panel */')
-  })
+  const specCodeValue$ = context.map(json => json.specsCode || '')
 
   const specCodeEditable$ = context.map(json => {
     if (json.specsCodeEditable === false) {
@@ -61,13 +56,9 @@ function SpecsPanel(sources) {
   const editor = AceEditor({DOM, initialValue$: specCodeValue$, params$})
   const vtree$ = view(editor)
 
-  const code$ = editor.value$.map(code => {
-    return code.replace('/* the code from the left panel */', 'require(\'the code from the left panel\')')
-  })
-
   return {
     DOM: vtree$,
-    code$: code$
+    code$: editor.value$
   }
 }
 

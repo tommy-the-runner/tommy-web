@@ -11,6 +11,7 @@ import Results from './components/results'
 
 function executeSpecs(userCode, specsCode) {
   let promise = tommy.run(userCode, specsCode, {
+    subjectPackageName: 'the code from the left panel',
     extraModules: {
       'sinon-chai': sinonChai
     }
